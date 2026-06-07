@@ -1,19 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Qeloria Content Publisher</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Qeloria Content Publisher — a content-management tool that helps educational creators publish, edit, and manage videos, photos, and text posts on their own Facebook Pages, Instagram Business accounts, and TikTok account via official platform APIs.">
+    <meta name="keywords" content="Qeloria, content publishing, Facebook Pages API, Instagram Graph API, TikTok Content Posting API, English learning, educational content">
+    <meta name="author" content="Qeloria">
+    <meta name="contact" content="awadbot1@gmail.com">
+    <meta property="og:title" content="Qeloria Content Publisher">
+    <meta property="og:description" content="Educational content publishing tool for creators using Facebook, Instagram, and TikTok official APIs.">
+    <meta property="og:type" content="website">
+    <title>Qeloria — Educational Content Publisher</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 100px 20px; background: #f0f4ff; }
-        h1 { color: #1a1a2e; }
-        a { color: #4361ee; margin: 0 16px; font-size: 18px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4361ee 0%, #1a1a2e 100%); color: #fff; line-height: 1.6; min-height: 100vh; }
+        .hero { max-width: 900px; margin: 0 auto; padding: 80px 20px 40px; text-align: center; }
+        .logo { font-size: 64px; margin-bottom: 16px; }
+        h1 { font-size: 42px; margin-bottom: 12px; font-weight: 700; }
+        .tagline { font-size: 20px; opacity: 0.9; margin-bottom: 32px; }
+        .cta { display: inline-block; padding: 14px 32px; background: #10b981; color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+        .section { background: rgba(255,255,255,0.08); padding: 32px; border-radius: 12px; margin: 24px 0; backdrop-filter: blur(10px); }
+        h2 { font-size: 24px; margin-bottom: 16px; color: #fff; }
+        h3 { font-size: 18px; margin-top: 18px; margin-bottom: 8px; }
+        p { margin-bottom: 12px; opacity: 0.95; }
+        ul { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; opacity: 0.95; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; }
+        .feature { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; text-align: center; }
+        .feature .icon { font-size: 36px; margin-bottom: 8px; }
+        .feature h3 { margin: 8px 0; }
+        .links { text-align: center; padding: 32px 20px; }
+        .links a { color: #fff; margin: 0 16px; text-decoration: underline; opacity: 0.9; }
+        .links a:hover { opacity: 1; }
+        .footer { text-align: center; padding: 24px 20px; opacity: 0.7; font-size: 14px; }
+        .contact { background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); }
     </style>
 </head>
 <body>
-    <h1>Qeloria Content Publisher</h1>
-    <p>Educational content publishing tool</p>
-    <br>
-    <a href="privacy-policy.html">Privacy Policy</a>
-    <a href="terms-of-service.html">Terms of Service</a>
+    <div class="hero">
+        <div class="logo">🎓</div>
+        <h1>Qeloria</h1>
+        <p class="tagline">Educational Content Publisher</p>
+        <p>A content-management tool for English-language learning creators who publish to Facebook Pages, Instagram, and TikTok via the platforms' official APIs.</p>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>About Qeloria</h2>
+            <p>Qeloria Content Publisher is a privately-operated content-management application. It is designed and operated by an individual creator-developer (Qeloria) for use by educational content creators on their <em>own</em> Facebook Pages, Instagram Business or Creator accounts, and TikTok account.</p>
+            <p>The application's sole purpose is to help creators upload, publish, edit, and manage their own short-form educational videos, photos, and text posts, and to reply to comments left by their audience — using the official Facebook Graph API, Instagram Graph API, and TikTok Content Posting API.</p>
+        </div>
+
+        <div class="section">
+            <h2>What Qeloria Does</h2>
+            <div class="grid">
+                <div class="feature">
+                    <div class="icon">⬆️</div>
+                    <h3>Upload Videos</h3>
+                    <p>Upload videos to the creator's own Facebook Pages, Instagram, and TikTok account.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">📤</div>
+                    <h3>Publish Posts</h3>
+                    <p>Publish text posts, photos, and videos (including Reels) to the creator's connected accounts.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">✂️</div>
+                    <h3>Edit Videos</h3>
+                    <p>Trim, crop, merge, and add text overlays to the creator's own videos before publishing.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">✏️</div>
+                    <h3>Edit Metadata</h3>
+                    <p>Edit the title, caption, description, hashtags, and thumbnail of the creator's own published content.</p>
+                </div>
+                <div class="feature">
+                    <div class="icon">💬</div>
+                    <h3>Reply to Comments</h3>
+                    <p>Post text replies to comments left by the audience on the creator's own published content.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>What Qeloria Does NOT Do</h2>
+            <ul>
+                <li>❌ Does not collect followers, friends lists, private messages, or contact lists of any user.</li>
+                <li>❌ Does not perform mass automated actions, spam, or fake engagement.</li>
+                <li>❌ Does not resell, transfer, or share data with advertising networks or third parties.</li>
+                <li>❌ Does not act on accounts the connecting user does not own or have written authorization to manage.</li>
+                <li>❌ Does not embed any analytics, advertising, or social-tracking SDKs.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Platforms Used</h2>
+            <ul>
+                <li><strong>Facebook Pages</strong> — via the Meta Graph API (<code>pages_manage_posts</code>, <code>pages_show_list</code>, <code>pages_read_engagement</code>, <code>pages_manage_engagement</code>).</li>
+                <li><strong>Instagram Business / Creator accounts</strong> — via the Meta Graph API (<code>instagram_basic</code>, <code>instagram_content_publish</code>, <code>instagram_manage_insights</code>, <code>instagram_manage_comments</code>).</li>
+                <li><strong>TikTok</strong> — via the TikTok Content Posting API (<code>user.info.basic</code>, <code>video.upload</code>, <code>video.publish</code>, <code>video.list</code>, <code>comment.list</code>, <code>comment.reply</code>).</li>
+            </ul>
+        </div>
+
+        <div class="section contact">
+            <h2>Contact</h2>
+            <p><strong>Operator:</strong> Qeloria</p>
+            <p><strong>Email:</strong> <a href="mailto:awadbot1@gmail.com" style="color: #fff;">awadbot1@gmail.com</a></p>
+            <p><strong>Response time:</strong> within 7 business days for support requests, within 30 days for privacy / data requests.</p>
+        </div>
+    </div>
+
+    <div class="links">
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <a href="business-info.html">Business Information</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2025–2026 Qeloria Content Publisher. All rights reserved.</p>
+    </div>
 </body>
 </html>
