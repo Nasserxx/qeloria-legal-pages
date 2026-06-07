@@ -7,95 +7,171 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; color: #333; line-height: 1.8; }
-        .container { max-width: 800px; margin: 40px auto; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+        .container { max-width: 900px; margin: 40px auto; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
         h1 { color: #1a1a2e; font-size: 28px; margin-bottom: 8px; }
         .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
         h2 { color: #16213e; font-size: 20px; margin-top: 30px; margin-bottom: 12px; border-bottom: 2px solid #e8e8e8; padding-bottom: 6px; }
+        h3 { color: #16213e; font-size: 16px; margin-top: 18px; margin-bottom: 8px; }
         p { margin-bottom: 14px; }
-        ul { margin-left: 24px; margin-bottom: 14px; }
+        ul, ol { margin-left: 24px; margin-bottom: 14px; }
         li { margin-bottom: 8px; }
         .highlight { background: #fff8f0; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9f43; margin: 16px 0; }
         .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 13px; }
+        code { background: #f4f4f6; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📜 Terms of Service</h1>
-        <p class="subtitle">Qeloria Content Publisher — Last updated: June 2025</p>
+        <p class="subtitle">Qeloria Content Publisher — Last updated: June 8, 2026</p>
 
         <div class="highlight">
-            <strong>Please read carefully:</strong> By using Qeloria Content Publisher, you agree to these terms. This tool is designed to help educational content creators publish videos to TikTok efficiently and responsibly.
+            <strong>Please read carefully:</strong> By connecting your TikTok, Facebook, or Instagram account to Qeloria Content Publisher, you agree to these Terms of Service. This tool is designed to help educational content creators publish videos to these platforms efficiently and responsibly, in full compliance with each platform's Developer Policies and Terms.
         </div>
 
         <h2>1. Acceptance of Terms</h2>
-        <p>By connecting your TikTok account to Qeloria Content Publisher, you agree to be bound by these Terms of Service. If you do not agree, please do not use the application.</p>
+        <p>By installing, connecting, or otherwise using Qeloria Content Publisher (the "Service"), you agree to be bound by these Terms of Service ("Terms") and our <a href="privacy-policy.html">Privacy Policy</a>. If you do not agree, do not use the Service.</p>
 
-        <h2>2. Description of Service</h2>
-        <p>Qeloria Content Publisher is a content management tool that allows educational creators to:</p>
+        <h2>2. Description of the Service</h2>
+        <p>Qeloria Content Publisher is a content-management tool that allows educational creators to publish short-form videos to the following platforms through their respective official APIs:</p>
         <ul>
-            <li>Publish short-form educational videos to TikTok via the official Content Posting API</li>
-            <li>Manage video metadata including titles, descriptions, and tags</li>
-            <li>Schedule and organize content publishing</li>
-            <li>Track published content status</li>
+            <li><strong>TikTok</strong> — via the TikTok Content Posting API</li>
+            <li><strong>Facebook Pages</strong> — via the Meta Graph API (<code>pages_manage_posts</code>, <code>pages_show_list</code>)</li>
+            <li><strong>Instagram</strong> — via the Meta Graph API (<code>instagram_content_publish</code>) on Instagram Business or Creator accounts</li>
+        </ul>
+        <p>The Service provides the following features:</p>
+        <ul>
+            <li>Upload video files and metadata (title, caption, hashtags, thumbnail).</li>
+            <li>Publish immediately or schedule publication to a specific date and time.</li>
+            <li>Manage multiple connected accounts across the supported platforms.</li>
+            <li>Track publish status and retrieve post IDs from each platform.</li>
+            <li>Delete previously published content via the platform APIs (where supported).</li>
         </ul>
 
-        <h2>3. User Responsibilities</h2>
+        <h2>3. Eligibility</h2>
+        <p>You must be at least 18 years old (or the age of digital consent in your jurisdiction, whichever is higher) to use this Service. You represent that you have the legal capacity to enter into these Terms and that the account(s) you connect belong to you or that you have explicit authorization to act on them.</p>
+
+        <h2>4. User Responsibilities</h2>
+        <p>You agree that you are solely responsible for the content you upload and publish through the Service. Specifically, you agree that you will:</p>
         <ul>
-            <li>You must own or have rights to all content you publish</li>
-            <li>You are solely responsible for the content you upload and distribute</li>
-            <li>Your content must comply with TikTok's Community Guidelines and Terms of Service</li>
-            <li>You must not publish content that is illegal, harmful, misleading, or infringes on others' rights</li>
-            <li>You must maintain the security of your connected accounts</li>
+            <li>Own or have all necessary rights, licenses, and consents to every piece of content (video, audio, image, text) you publish.</li>
+            <li>Ensure that you hold the rights to any music, voice, or copyrighted material embedded in your videos, including any required synchronization, mechanical, or neighboring rights.</li>
+            <li>Obtain all necessary consents from identifiable individuals featured in your content (right of publicity, GDPR Art. 6/9 where applicable).</li>
+            <li>Comply with TikTok's <a href="https://www.tiktok.com/community-guidelines">Community Guidelines</a>, TikTok's <a href="https://developers.tiktok.com/doc/tiktok-api-terms-of-service">API Terms of Service</a>, and TikTok's Music Usage Rules.</li>
+            <li>Comply with Meta's <a href="https://developers.facebook.com/terms">Platform Terms</a>, the <a href="https://developers.facebook.com/devpolicy/">Meta Developer Policy</a>, Facebook's <a href="https://www.facebook.com/communitystandards/">Community Standards</a>, and Instagram's <a href="https://help.instagram.com/477434105621119">Community Guidelines</a>.</li>
+            <li>Not publish content that is illegal, defamatory, infringing, hateful, harassing, deceptive, sexually explicit, violent, or otherwise prohibited by any of the above policies or by applicable law.</li>
+            <li>Maintain the security of any device or account you use to access the Service.</li>
         </ul>
 
-        <h2>4. Acceptable Use</h2>
-        <p>This tool is intended exclusively for:</p>
+        <h2>5. Platform Authorization &amp; OAuth Scopes</h2>
+        <p>The Service uses the official OAuth 2.0 authorization flows of each platform. We <strong>never</strong> ask for or store your TikTok, Facebook, or Instagram password. You authorize the Service to act on your behalf with the following minimum scopes:</p>
+
+        <h3>5.1 TikTok scopes</h3>
         <ul>
-            <li>Publishing original educational content</li>
-            <li>English language learning materials</li>
-            <li>Family-friendly educational videos</li>
-        </ul>
-        <p>You agree NOT to use this service for:</p>
-        <ul>
-            <li>Spam or mass unsolicited posting</li>
-            <li>Uploading copyrighted content you do not own</li>
-            <li>Misleading or deceptive content</li>
-            <li>Any activity that violates TikTok's policies</li>
+            <li><code>user.info.basic</code> — read your TikTok display name and avatar.</li>
+            <li><code>video.publish</code> — publish videos to your TikTok account.</li>
+            <li><code>video.upload</code> — upload source video files to TikTok servers.</li>
         </ul>
 
-        <h2>5. Authentication & Access</h2>
+        <h3>5.2 Facebook scopes</h3>
         <ul>
-            <li>We use TikTok's official OAuth2 authentication — we never ask for your password</li>
-            <li>You may revoke access at any time through your TikTok account settings</li>
-            <li>We only request permissions necessary for publishing content</li>
+            <li><code>public_profile</code>, <code>email</code> — basic identity.</li>
+            <li><code>pages_show_list</code> — list Facebook Pages you manage.</li>
+            <li><code>pages_manage_posts</code> — publish posts and Reels to those Pages.</li>
+            <li><code>pages_read_engagement</code>, <code>pages_manage_engagement</code> — read and reply to comments on published posts.</li>
         </ul>
 
-        <h2>6. Content Ownership</h2>
-        <p>You retain full ownership of all content you create and publish. We do not claim any rights to your videos, titles, descriptions, or any other creative materials.</p>
-
-        <h2>7. Limitation of Liability</h2>
-        <p>Qeloria Content Publisher is provided "as is" without warranties. We are not responsible for:</p>
+        <h3>5.3 Instagram scopes</h3>
         <ul>
-            <li>Content removal by TikTok for policy violations</li>
-            <li>Account suspension or termination by TikTok</li>
-            <li>Any losses resulting from the use or inability to use the service</li>
-            <li>TikTok API changes, outages, or deprecations</li>
+            <li><code>instagram_basic</code> — read IG business account profile.</li>
+            <li><code>instagram_content_publish</code> — publish Reels and posts to IG.</li>
+            <li><code>instagram_manage_insights</code> — read post performance metrics.</li>
         </ul>
 
-        <h2>8. Termination</h2>
-        <p>Either party may terminate this agreement at any time by disconnecting the TikTok account. Upon termination, all stored tokens and data will be deleted.</p>
+        <p>You may revoke any of these permissions at any time through the platform's own settings (TikTok app → Settings and privacy → Security → Manage app permissions; Facebook → Settings &amp; privacy → Business integrations; Instagram → Account Center → Apps and websites). Revocation immediately stops our ability to act on your behalf; the Service will stop functioning until you re-authorize.</p>
 
-        <h2>9. Modifications</h2>
-        <p>We reserve the right to modify these terms at any time. Continued use after modifications constitutes acceptance of the updated terms.</p>
+        <h2>6. Acceptable Use</h2>
+        <p>The Service is intended for publishing original, family-friendly, educational content such as English-language learning materials. You agree <strong>not</strong> to use the Service to:</p>
+        <ul>
+            <li>Publish spam, repetitive, or mass unsolicited content.</li>
+            <li>Publish content you do not own, or that infringes any third party's intellectual property, publicity, or privacy rights.</li>
+            <li>Publish misleading, deceptive, or fraudulent content (including deepfakes or manipulated media without disclosure).</li>
+            <li>Publish hate speech, harassment, threats, or content that incites violence.</li>
+            <li>Publish sexually explicit, pornographic, or exploitative content involving minors.</li>
+            <li>Publish content that promotes illegal activity, regulated goods (drugs, weapons, gambling), or activity prohibited by any of the integrated platforms.</li>
+            <li>Circumvent, disable, or otherwise interfere with the Service's rate limits, security features, or audit logging.</li>
+            <li>Use the Service to scrape, bulk-collect, or resell data obtained through the platform APIs.</li>
+            <li>Use the Service in any way that violates Meta's <a href="https://developers.facebook.com/devpolicy/">Developer Policy</a> (including section on Platform Integrity) or TikTok's <a href="https://developers.tiktok.com/doc/tiktok-api-terms-of-service">API Terms of Service</a>.</li>
+        </ul>
 
-        <h2>10. Governing Law</h2>
-        <p>These terms are governed by applicable laws. Any disputes shall be resolved through good-faith negotiation.</p>
+        <h2>7. Content Ownership &amp; License</h2>
+        <p>You retain full ownership of all content you create and publish through the Service. We claim no rights to your videos, captions, hashtags, or any other creative material. By using the Service, you grant us a <strong>limited, non-exclusive, royalty-free, revocable license</strong> to:</p>
+        <ul>
+            <li>Upload your video and metadata to the platform(s) of your choice via their official APIs.</li>
+            <li>Store your video temporarily (up to 24 hours) for the purpose of completing the upload.</li>
+            <li>Store publish logs (post ID, timestamp, status) for up to 12 months.</li>
+        </ul>
+        <p>This license terminates when you delete your account, revoke platform authorization, or when the underlying publish operation completes — whichever comes first.</p>
 
-        <h2>11. Contact</h2>
-        <p>For questions about these terms, please contact: <strong>qeloria.publisher@gmail.com</strong></p>
+        <h2>8. Data We Process (Summary)</h2>
+        <p>For a complete description of the data we collect, store, share, and your rights over it, see our <a href="privacy-policy.html">Privacy Policy</a>. In short:</p>
+        <ul>
+            <li>Encrypted OAuth tokens (TikTok, Facebook, Instagram).</li>
+            <li>Video files (transient, ≤ 24h).</li>
+            <li>Publish logs (≤ 12 months).</li>
+            <li>Support emails (≤ 24 months).</li>
+        </ul>
+
+        <h2>9. Rate Limits &amp; API Hygiene</h2>
+        <p>The Service respects each platform's published rate limits and uses exponential backoff on 429 responses. You agree not to:</p>
+        <ul>
+            <li>Attempt to circumvent rate limits by creating multiple accounts or routing requests through proxies.</li>
+            <li>Use automated means to publish at a volume or frequency that exceeds what a single human user could reasonably perform.</li>
+        </ul>
+        <p>We may, at our sole discretion, throttle or suspend your use of the Service if we detect activity that may trigger a platform-level enforcement action against our app credentials.</p>
+
+        <h2>10. Third-Party Platforms (No Liability for Their Actions)</h2>
+        <p>The Service depends on the continued availability of the TikTok, Facebook, and Instagram APIs. We are not responsible for:</p>
+        <ul>
+            <li>Changes to API endpoints, scopes, or terms made by the platforms.</li>
+            <li>Removal of your content, suspension of your account, or any other enforcement action taken by a platform against you.</li>
+            <li>Outages, rate-limiting, deprecations, or discontinuation of any platform's API.</li>
+            <li>Loss of data, views, engagement, or revenue resulting from the above.</li>
+        </ul>
+
+        <h2>11. Service Availability &amp; Changes</h2>
+        <p>The Service is provided "as is" and "as available." We may modify, suspend, or discontinue any feature at any time, with or without notice, including in response to platform-side changes. We will not be liable for any loss resulting from such changes.</p>
+
+        <h2>12. Termination</h2>
+        <p>You may terminate this agreement at any time by revoking platform authorization in your account settings and requesting data deletion (see <a href="privacy-policy.html#8">Privacy Policy §8</a>). We may terminate or suspend your access if:</p>
+        <ul>
+            <li>You breach these Terms.</li>
+            <li>Your activity triggers a platform-level enforcement action that risks our app credentials.</li>
+            <li>Required by law.</li>
+        </ul>
+        <p>Upon termination, we delete your tokens, video files, and publish logs within 30 days.</p>
+
+        <h2>13. Disclaimers &amp; Limitation of Liability</h2>
+        <p>To the maximum extent permitted by law, the Service is provided <strong>WITHOUT WARRANTY OF ANY KIND</strong>, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the Service will be uninterrupted, error-free, or that publish operations will always succeed.</p>
+        <p>In no event shall Qeloria, its operator, or its affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, revenue, data, or goodwill, arising from your use of (or inability to use) the Service. Our total aggregate liability for any claim shall not exceed the greater of (a) the amount you paid us in the 12 months preceding the claim, or (b) EUR 100.</p>
+
+        <h2>14. Indemnification</h2>
+        <p>You agree to indemnify and hold harmless Qeloria and its operator from any claim, demand, loss, or expense (including reasonable legal fees) arising from (a) your content, (b) your breach of these Terms, (c) your violation of any platform's policies, or (d) your violation of any applicable law or third-party right.</p>
+
+        <h2>15. Governing Law &amp; Dispute Resolution</h2>
+        <p>These Terms are governed by the laws of the Kingdom of Saudi Arabia, without regard to its conflict-of-law rules. Any dispute arising from or relating to these Terms shall first be resolved through good-faith negotiation. If unresolved within 30 days, the dispute shall be submitted to the competent courts of Riyadh, Saudi Arabia.</p>
+        <p>EU/UK consumers retain the protection of the mandatory laws of their country of residence.</p>
+
+        <h2>16. Changes to These Terms</h2>
+        <p>We may update these Terms. Material changes will be announced by email and by posting the updated version with a new "Last updated" date. Continued use after 14 days from the posting date constitutes acceptance of the updated Terms. If you do not accept, you must stop using the Service and revoke platform authorization.</p>
+
+        <h2>17. Contact</h2>
+        <p>For questions about these Terms, please contact:<br>
+        <strong>Email:</strong> <code>qeloria.publisher@gmail.com</code><br>
+        <strong>Response time:</strong> within 7 business days</p>
 
         <div class="footer">
-            <p>© 2025 Qeloria Content Publisher. All rights reserved.</p>
+            <p>© 2025–2026 Qeloria Content Publisher. All rights reserved.</p>
         </div>
     </div>
 </body>
