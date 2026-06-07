@@ -19,6 +19,8 @@
         th, td { border: 1px solid #e8e8e8; padding: 10px; text-align: left; vertical-align: top; }
         th { background: #f0f4ff; color: #1a1a2e; }
         .highlight { background: #f0f4ff; padding: 16px; border-radius: 8px; border-left: 4px solid #4361ee; margin: 16px 0; }
+        .allowed { background: #ecfdf5; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981; margin: 16px 0; }
+        .prohibited { background: #fef2f2; padding: 16px; border-radius: 8px; border-left: 4px solid #ef4444; margin: 16px 0; }
         .warning { background: #fff8f0; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9f43; margin: 16px 0; }
         .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 13px; }
         code { background: #f4f4f6; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
@@ -30,7 +32,7 @@
         <p class="subtitle">Qeloria Content Publisher — Last updated: June 8, 2026</p>
 
         <div class="highlight">
-            <strong>Summary:</strong> Qeloria Content Publisher is a content-management tool that publishes educational videos to TikTok, Facebook Pages, and Instagram accounts on behalf of the user. We collect the minimum data necessary to authenticate with these platforms and to publish content. We do not sell, share, or rent personal information to any third party.
+            <strong>Summary:</strong> Qeloria Content Publisher is a content-management tool that <strong>uploads, publishes, edits, and manages</strong> videos, photos, and text posts on the user's own Facebook Pages, Instagram Business accounts, and TikTok account. It also enables the user to <strong>reply to audience comments</strong> on the content they have published. We collect the minimum data necessary to perform these actions on the user's behalf. We do not sell, share, or rent personal information to any third party.
         </div>
 
         <h2>1. Data Controller &amp; Contact</h2>
@@ -40,93 +42,158 @@
         <p><strong>Data Protection contact (EU/UK):</strong> <code>awadbot1@gmail.com</code></p>
         <p>For all privacy-related requests — including data access, correction, deletion, portability, and objection — please email us at the address above. We respond within 30 days.</p>
 
-        <h2>2. Information We Collect</h2>
-        <p>We collect only the data necessary to authenticate with the integrated platforms and to publish the content you explicitly create or upload. We do not collect any data passively (no analytics SDKs, no advertising identifiers, no fingerprinting).</p>
+        <h2>2. What This App Does (Authorized Use Cases)</h2>
+        <p>The <strong>only</strong> purposes for which Qeloria Content Publisher uses the platform APIs are the following operations performed on the user's own accounts, on the user's explicit instruction:</p>
 
-        <h3>2.1 Account &amp; authentication data</h3>
+        <div class="allowed">
+            <strong>✅ Authorized use cases (Meta + TikTok):</strong>
+            <ol style="margin-left: 20px; margin-top: 8px;">
+                <li><strong>Uploading videos</strong> to the user's Facebook Pages, Instagram Business/Creator account, and TikTok account.</li>
+                <li><strong>Publishing posts</strong> — including text posts, photo posts, and video posts (including Reels) — to the user's Facebook Pages, Instagram, and TikTok account.</li>
+                <li><strong>Editing videos</strong> — basic in-app video editing (trimming, cropping, adding text overlay, merging clips) on the user's own device or our server, applied to videos the user uploads, before publication.</li>
+                <li><strong>Editing video metadata</strong> — changing the video <em>title</em>, <em>caption / description</em>, <em>hashtags</em>, <em>thumbnail / cover image</em>, and <em>privacy / visibility settings</em> of content the user has already published via the app.</li>
+                <li><strong>Replying to audience comments</strong> — posting replies (text replies, hidden / deleted comments) on the user's own published posts and videos on Facebook Pages, Instagram, and TikTok.</li>
+            </ol>
+        </div>
+
+        <p>Every action listed above is initiated by the user from within the Qeloria Content Publisher interface. The app does not perform any of these actions autonomously, in bulk, on behalf of a third party, or for any user who has not authorized the app.</p>
+
+        <h2>3. What This App Does NOT Do (Prohibited Use Cases)</h2>
+        <p>To make our scope explicit — and to comply with Meta Platform Terms §3 and TikTok API Terms — the app is <strong>strictly prohibited</strong> from performing any of the following:</p>
+
+        <div class="prohibited">
+            <strong>❌ Prohibited use cases:</strong>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+                <li>Reading, collecting, scraping, or exporting any user's <em>friends list, followers, contact list, private messages</em>, or any data of users who have not authorized the app.</li>
+                <li>Performing <em>automated mass actions</em> (e.g. mass-following, mass-liking, mass-commenting) or any behaviour that resembles spam, fake engagement, or platform-integrity violations.</li>
+                <li>Reading or sharing <em>non-public profile fields</em>, sensitive personal data (race, religion, health, sexual orientation, political views), or financial / government ID data of any user.</li>
+                <li>Reselling, syndication, or transferring any data obtained through the platform APIs to any third party, data broker, advertising network, or AI training pipeline.</li>
+                <li>Targeting users with advertising, retargeting, lookalike modelling, or attribution measurement.</li>
+                <li>Performing surveillance, background checks, facial recognition, or any biometric processing.</li>
+                <li>Acting on a Page, Profile, or account that the connecting user does not own or have explicit written authorization to manage.</li>
+            </ul>
+        </div>
+
+        <p>These prohibitions are enforced both technically (the app's backend only accepts requests for the actions listed in §2) and contractually (violation by an end user terminates their account under the Terms of Service).</p>
+
+        <h2>4. Information We Collect</h2>
+        <p>We collect only the data necessary to authenticate with the integrated platforms and to perform the authorized use cases listed in §2. We do not collect any data passively (no analytics SDKs, no advertising identifiers, no fingerprinting).</p>
+
+        <h3>4.1 Account &amp; authentication data</h3>
         <ul>
-            <li><strong>TikTok:</strong> OAuth 2.0 <em>access token</em>, <em>refresh token</em>, <em>open_id</em>, and the <em>scopes</em> you authorized (currently: <code>user.info.basic</code>, <code>video.publish</code>, <code>video.upload</code>).</li>
-            <li><strong>Facebook:</strong> OAuth 2.0 <em>user access token</em>, <em>app-scoped user ID</em>, and the <em>permissions</em> you granted (currently: <code>pages_show_list</code>, <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_manage_engagement</code>, <code>public_profile</code>, <code>email</code>).</li>
+            <li><strong>TikTok:</strong> OAuth 2.0 <em>access token</em>, <em>refresh token</em>, <em>open_id</em>, and the <em>scopes</em> you authorized (currently: <code>user.info.basic</code>, <code>video.publish</code>, <code>video.upload</code>, <code>video.list</code>, <code>comment.list</code>, <code>comment.post</code>, <code>comment.reply</code>).</li>
+            <li><strong>Facebook:</strong> OAuth 2.0 <em>user access token</em>, <em>app-scoped user ID</em>, <em>Page access token(s)</em> for Pages the user manages, and the <em>permissions</em> you granted (currently: <code>public_profile</code>, <code>email</code>, <code>pages_show_list</code>, <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_manage_engagement</code>).</li>
             <li><strong>Instagram (via Facebook Graph):</strong> <em>IG user/business account ID</em> linked to the authorized Facebook Page, and a Page access token with the <code>instagram_basic</code>, <code>instagram_content_publish</code>, and <code>instagram_manage_insights</code> permissions.</li>
         </ul>
 
-        <h3>2.2 Content data you provide</h3>
+        <h3>4.2 Content data you provide</h3>
         <ul>
-            <li>Video files (mp4) you upload for publishing.</li>
-            <li>Text and metadata: title, caption, description, hashtags, scheduled publish time, thumbnail preference.</li>
-            <li>Publishing configuration: which TikTok / Facebook Page / Instagram account to post to, the schedule calendar, and your draft-vs-publish choices.</li>
+            <li><strong>Video files (mp4)</strong> — uploaded for editing, publishing, or scheduling.</li>
+            <li><strong>Photo files (jpg / png)</strong> — uploaded for photo posts.</li>
+            <li><strong>Text content</strong> — captions, descriptions, post bodies, hashtags, and comment replies you author.</li>
+            <li><strong>Editing parameters</strong> — trim points, crop dimensions, text-overlay positions, thumbnail selection, applied filters or effects.</li>
+            <li><strong>Metadata edits</strong> — updated title, description, tags, privacy setting for previously published content.</li>
+            <li><strong>Publishing configuration</strong> — which TikTok / Facebook Page / Instagram account to post to, the schedule calendar, and your draft-vs-publish choices.</li>
         </ul>
 
-        <h3>2.3 Operational data</h3>
+        <h3>4.3 Operational data</h3>
         <ul>
             <li>Publish logs (timestamps, post IDs returned by each platform, success/failure status).</li>
+            <li>Edit logs (which post ID was modified, what field changed, old-vs-new value for metadata edits).</li>
+            <li>Comment-reply logs (post ID, comment ID, reply text, timestamp).</li>
             <li>Application errors (sanitized — no tokens or passwords ever logged).</li>
         </ul>
 
-        <h3>2.4 What we DO NOT collect</h3>
+        <h3>4.4 What we DO NOT collect</h3>
         <ul>
             <li>Your TikTok / Facebook / Instagram password (we never see it; OAuth is used).</li>
-            <li>Private messages, friend lists, followers, or contacts.</li>
-            <li>Browsing history, device identifiers, advertising IDs, or location data.</li>
+            <li>Private messages, friend lists, followers, or contacts of any user — including yours.</li>
+            <li>Browsing history, device identifiers, advertising IDs, or precise location data.</li>
             <li>Biometric, financial, or government-identification data.</li>
-            <li>Data from users who have not authorized our app.</li>
+            <li>Data of any user who has not authorized our app.</li>
         </ul>
 
-        <h2>3. How We Use Your Information (Lawful Basis)</h2>
+        <h2>5. How We Use Your Information (Lawful Basis, mapped to use cases)</h2>
         <table>
-            <tr><th>Data</th><th>Purpose</th><th>Legal basis (GDPR)</th></tr>
-            <tr><td>OAuth tokens</td><td>Authenticate API requests to the platform on your behalf</td><td>Contract performance (Art. 6(1)(b))</td></tr>
-            <tr><td>Video files + metadata</td><td>Upload and publish content per your instruction</td><td>Contract performance (Art. 6(1)(b))</td></tr>
-            <tr><td>Publish logs</td><td>Show you post history and debug failures</td><td>Legitimate interest (Art. 6(1)(f))</td></tr>
-            <tr><td>Email address (if provided)</td><td>Respond to your support requests</td><td>Consent (Art. 6(1)(a))</td></tr>
+            <tr><th>Authorized use case (§2)</th><th>Data used</th><th>Legal basis (GDPR)</th></tr>
+            <tr><td>Upload videos</td><td>Video file, OAuth token, target Page / IG / TikTok ID</td><td>Contract performance (Art. 6(1)(b))</td></tr>
+            <tr><td>Publish posts (text / photo / video)</td><td>Post body, photo/video file, OAuth token, target ID</td><td>Contract performance (Art. 6(1)(b))</td></tr>
+            <tr><td>Edit videos (trim, crop, text overlay, merge)</td><td>Source video file, editing parameters</td><td>Contract performance (Art. 6(1)(b))</td></tr>
+            <tr><td>Edit video metadata (title, description, tags, thumbnail)</td><td>OAuth token, post ID, new title / description / tags / thumbnail</td><td>Contract performance (Art. 6(1)(b))</td></tr>
+            <tr><td>Reply to audience comments</td><td>OAuth token, post ID, comment ID, reply text</td><td>Contract performance (Art. 6(1)(b))</td></tr>
+            <tr><td>Publish logs &amp; error logs</td><td>Timestamp, post ID, status</td><td>Legitimate interest (Art. 6(1)(f))</td></tr>
+            <tr><td>Support emails</td><td>Email address, message body</td><td>Consent (Art. 6(1)(a))</td></tr>
         </table>
         <p>We do not use any of this data for automated decision-making, profiling, or advertising.</p>
 
-        <h2>4. Third-Party Services &amp; API Permissions</h2>
-        <p>To publish on your behalf, our backend servers make calls to the following third-party APIs. Your use of each platform is governed by that platform's own terms.</p>
+        <h2>6. Third-Party Services &amp; API Permissions</h2>
+        <p>To perform the authorized use cases in §2, our backend servers make calls to the following third-party APIs. Your use of each platform is governed by that platform's own terms.</p>
 
-        <h3>4.1 TikTok — Content Posting API</h3>
+        <h3>6.1 TikTok — Content Posting API</h3>
         <ul>
             <li><strong>Endpoint providers:</strong> TikTok (ByteDance Ltd.)</li>
-            <li><strong>Permissions used:</strong> <code>user.info.basic</code> (read display name, avatar), <code>video.publish</code> (publish to your account), <code>video.upload</code> (upload source file).</li>
-            <li><strong>Data shared with TikTok:</strong> video file, caption, hashtags, and the access token identifying you.</li>
-            <li><strong>Data received from TikTok:</strong> post ID, publish status, basic profile (display name, open_id).</li>
+            <li><strong>Permissions used:</strong>
+                <ul>
+                    <li><code>user.info.basic</code> — read display name and avatar.</li>
+                    <li><code>video.publish</code> / <code>video.upload</code> — upload and publish videos (§2.1, §2.2).</li>
+                    <li><code>video.list</code> — list your previously published videos so the app can show them in the editing interface (§2.4).</li>
+                    <li><code>comment.list</code>, <code>comment.post</code>, <code>comment.reply</code> — read and reply to comments on your videos (§2.5).</li>
+                </ul>
+            </li>
+            <li><strong>Data shared with TikTok:</strong> video file, photo, caption, hashtags, comment reply text, and the access token identifying you.</li>
+            <li><strong>Data received from TikTok:</strong> post ID, video ID, comment ID, publish status, basic profile (display name, open_id).</li>
             <li><strong>Privacy policy:</strong> <a href="https://www.tiktok.com/legal/privacy-policy">https://www.tiktok.com/legal/privacy-policy</a></li>
         </ul>
 
-        <h3>4.2 Meta (Facebook &amp; Instagram) — Graph API</h3>
+        <h3>6.2 Meta (Facebook &amp; Instagram) — Graph API</h3>
         <ul>
             <li><strong>Endpoint providers:</strong> Meta Platforms, Inc.</li>
-            <li><strong>Facebook permissions used:</strong> <code>public_profile</code>, <code>email</code>, <code>pages_show_list</code>, <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_manage_engagement</code>.</li>
-            <li><strong>Instagram permissions used (via Business Login):</strong> <code>instagram_basic</code>, <code>instagram_content_publish</code>, <code>instagram_manage_insights</code>.</li>
-            <li><strong>Data shared with Meta:</strong> video file, caption, the target Page ID / IG user ID, and the access token identifying you.</li>
-            <li><strong>Data received from Meta:</strong> post ID, publish status, Page name, Page ID, IG user ID, and basic profile (name, email if granted).</li>
+            <li><strong>Facebook permissions used (each maps to a use case in §2):</strong>
+                <ul>
+                    <li><code>public_profile</code>, <code>email</code> — basic identity.</li>
+                    <li><code>pages_show_list</code> — list Facebook Pages you manage.</li>
+                    <li><code>pages_manage_posts</code> — create, edit, and delete posts and Reels on your Pages (§2.1, §2.2, §2.4).</li>
+                    <li><code>pages_read_engagement</code> — read comments on your Page posts so you can see and reply to them (§2.5).</li>
+                    <li><code>pages_manage_engagement</code> — post replies to comments on your Page posts (§2.5).</li>
+                </ul>
+            </li>
+            <li><strong>Instagram permissions used (via Business Login):</strong>
+                <ul>
+                    <li><code>instagram_basic</code> — read IG business account profile.</li>
+                    <li><code>instagram_content_publish</code> — publish Reels and posts to IG (§2.1, §2.2).</li>
+                    <li><code>instagram_manage_insights</code> — read post performance metrics.</li>
+                    <li><code>instagram_manage_comments</code> — read and reply to comments on your IG posts (§2.5).</li>
+                </ul>
+            </li>
+            <li><strong>Data shared with Meta:</strong> video file, photo, caption, the target Page ID / IG user ID, comment reply text, and the access token identifying you.</li>
+            <li><strong>Data received from Meta:</strong> post ID, comment ID, publish status, Page name, Page ID, IG user ID, and basic profile (name, email if granted).</li>
             <li><strong>Privacy policy:</strong> <a href="https://www.facebook.com/privacy/policy/">https://www.facebook.com/privacy/policy/</a></li>
             <li><strong>Instagram-specific:</strong> <a href="https://privacycenter.instagram.com/policy">https://privacycenter.instagram.com/policy</a></li>
         </ul>
 
-        <h3>4.3 No other third parties</h3>
+        <h3>6.3 No other third parties</h3>
         <p>We do not embed any analytics, advertising, or social-tracking SDKs. We do not share your data with data brokers, marketing partners, or any other third party not listed above.</p>
 
-        <h2>5. Data Storage &amp; Security</h2>
+        <h2>7. Data Storage &amp; Security</h2>
         <ul>
             <li>OAuth tokens are stored encrypted at rest (AES-256) on private servers with restricted access.</li>
             <li>All HTTP traffic uses TLS 1.2+ (HTTPS).</li>
-            <li>Video files are stored only as long as needed to complete the publish job (typically deleted within 24 hours of successful upload).</li>
+            <li>Video and photo files are stored only as long as needed to complete the requested operation (publish, edit, or schedule) — typically deleted within 24 hours of successful completion.</li>
             <li>Access to production data is restricted to the app operator and protected by multi-factor authentication.</li>
             <li>We perform periodic security reviews and rotate keys on a documented schedule.</li>
         </ul>
         <p>No method of transmission or storage is 100% secure. If a breach occurs, we will notify affected users and the relevant supervisory authority within 72 hours, in line with GDPR Art. 33.</p>
 
-        <h2>6. Data Retention</h2>
+        <h2>8. Data Retention</h2>
         <ul>
             <li><strong>OAuth tokens:</strong> retained until you revoke access or delete your account. Refresh tokens are deleted on logout.</li>
-            <li><strong>Video files:</strong> deleted within 24 hours of a successful publish, or immediately upon a failed publish.</li>
-            <li><strong>Publish logs (post ID, status, timestamp):</strong> retained for 12 months for debugging, then anonymized.</li>
+            <li><strong>Source video / photo files (before publish):</strong> deleted within 24 hours of a successful publish, or immediately upon a failed publish.</li>
+            <li><strong>Edited video outputs (kept for your re-use):</strong> kept for 30 days, then deleted, unless you delete them earlier.</li>
+            <li><strong>Publish / edit / reply logs (post ID, comment ID, status, timestamp):</strong> retained for 12 months for debugging, then anonymized.</li>
             <li><strong>Support emails:</strong> retained for 24 months, then deleted.</li>
         </ul>
 
-        <h2>7. Your Rights</h2>
+        <h2>9. Your Rights</h2>
         <p>Regardless of where you live, you have the following rights:</p>
         <ul>
             <li><strong>Access:</strong> request a copy of all data we hold about you.</li>
@@ -138,10 +205,10 @@
             <li><strong>Lodge a complaint:</strong> with your local data-protection authority.</li>
         </ul>
 
-        <h3>7.1 How to exercise these rights</h3>
+        <h3>9.1 How to exercise these rights</h3>
         <p>Email <code>awadbot1@gmail.com</code> with the subject line <em>"Privacy Request"</em>. We verify identity before acting and respond within 30 days.</p>
 
-        <h3>7.2 How to revoke platform access (Meta &amp; TikTok requirements)</h3>
+        <h3>9.2 How to revoke platform access (Meta &amp; TikTok requirements)</h3>
         <ul>
             <li><strong>TikTok:</strong> TikTok app → Profile → Menu → Settings and privacy → Security → Manage app permissions → Qeloria Content Publisher → <em>Remove</em>.</li>
             <li><strong>Facebook:</strong> Settings &amp; privacy → Settings → Business integrations → Qeloria Content Publisher → <em>Remove</em>.</li>
@@ -149,7 +216,7 @@
         </ul>
         <p>Revoking access through the platform immediately invalidates our stored tokens. We additionally delete the token record from our database within 24 hours.</p>
 
-        <h2>8. Data Deletion Request (Meta App Review requirement)</h2>
+        <h2>10. Data Deletion Request (Meta App Review requirement)</h2>
         <p>Per Meta's Platform Terms, we provide the following self-service data-deletion endpoint and instructions:</p>
         <div class="warning">
             <strong>Data Deletion Instructions</strong><br>
@@ -159,16 +226,16 @@
                 <li>Emailing <code>awadbot1@gmail.com</code> with the subject <em>"Delete my data"</em> from the email address associated with your Qeloria account.</li>
             </ol>
             <br>
-            We will delete your account, OAuth tokens, video files, and publish logs within 30 days and send a confirmation email.
+            We will delete your account, OAuth tokens, source video / photo files, edited video outputs, publish / edit / reply logs, and support emails within 30 days and send a confirmation email.
         </div>
 
-        <h2>9. Children's Privacy</h2>
+        <h2>11. Children's Privacy</h2>
         <p>Our service is intended for adult content creators. We do not knowingly collect data from children under 13 (COPPA) or under 16 (GDPR). If you believe a child has used our service, contact us and we will delete the data within 7 days.</p>
 
-        <h2>10. International Data Transfers</h2>
+        <h2>12. International Data Transfers</h2>
         <p>Our servers are located in the European Union. When we call TikTok or Meta APIs, data may be transferred to and processed in the United States, Singapore, or other jurisdictions where these providers operate. We rely on the European Commission's Standard Contractual Clauses (SCCs) and the providers' respective Data Privacy Framework certifications for such transfers.</p>
 
-        <h2>11. Compliance</h2>
+        <h2>13. Compliance</h2>
         <p>This policy and our practices are designed to comply with:</p>
         <ul>
             <li>GDPR (EU 2016/679) and the UK GDPR</li>
@@ -178,10 +245,10 @@
             <li>TikTok Developer Terms of Service &amp; Content Posting API Terms</li>
         </ul>
 
-        <h2>12. Changes to This Policy</h2>
+        <h2>14. Changes to This Policy</h2>
         <p>We may update this policy. Material changes will be announced by email (if you have an account) and by posting the updated version on this page with a new "Last updated" date. Continued use after a change constitutes acceptance.</p>
 
-        <h2>13. Contact</h2>
+        <h2>15. Contact</h2>
         <p>Privacy questions, deletion requests, and any concerns:<br>
         <strong>Email:</strong> <code>awadbot1@gmail.com</code><br>
         <strong>Response time:</strong> within 30 days</p>
