@@ -7,74 +7,187 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; color: #333; line-height: 1.8; }
-        .container { max-width: 800px; margin: 40px auto; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+        .container { max-width: 900px; margin: 40px auto; padding: 40px; background: #fff; border-radius: 12px; box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
         h1 { color: #1a1a2e; font-size: 28px; margin-bottom: 8px; }
         .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
         h2 { color: #16213e; font-size: 20px; margin-top: 30px; margin-bottom: 12px; border-bottom: 2px solid #e8e8e8; padding-bottom: 6px; }
+        h3 { color: #16213e; font-size: 16px; margin-top: 18px; margin-bottom: 8px; }
         p { margin-bottom: 14px; }
         ul { margin-left: 24px; margin-bottom: 14px; }
         li { margin-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+        th, td { border: 1px solid #e8e8e8; padding: 10px; text-align: left; vertical-align: top; }
+        th { background: #f0f4ff; color: #1a1a2e; }
         .highlight { background: #f0f4ff; padding: 16px; border-radius: 8px; border-left: 4px solid #4361ee; margin: 16px 0; }
+        .warning { background: #fff8f0; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9f43; margin: 16px 0; }
         .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 13px; }
+        code { background: #f4f4f6; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🔒 Privacy Policy</h1>
-        <p class="subtitle">Qeloria Content Publisher — Last updated: June 2025</p>
+        <p class="subtitle">Qeloria Content Publisher — Last updated: June 8, 2026</p>
 
         <div class="highlight">
-            <strong>Summary:</strong> We collect the minimum data necessary to publish your educational content to TikTok. We do not sell, share, or distribute any personal information.
+            <strong>Summary:</strong> Qeloria Content Publisher is a content-management tool that publishes educational videos to TikTok, Facebook Pages, and Instagram accounts on behalf of the user. We collect the minimum data necessary to authenticate with these platforms and to publish content. We do not sell, share, or rent personal information to any third party.
         </div>
 
-        <h2>1. Information We Collect</h2>
-        <p>Qeloria Content Publisher collects only the following information:</p>
+        <h2>1. Data Controller &amp; Contact</h2>
+        <p><strong>Application name:</strong> Qeloria Content Publisher</p>
+        <p><strong>Operator / Data controller:</strong> Qeloria</p>
+        <p><strong>Contact email:</strong> <code>qeloria.publisher@gmail.com</code></p>
+        <p><strong>Data Protection contact (EU/UK):</strong> <code>qeloria.publisher@gmail.com</code></p>
+        <p>For all privacy-related requests — including data access, correction, deletion, portability, and objection — please email us at the address above. We respond within 30 days.</p>
+
+        <h2>2. Information We Collect</h2>
+        <p>We collect only the data necessary to authenticate with the integrated platforms and to publish the content you explicitly create or upload. We do not collect any data passively (no analytics SDKs, no advertising identifiers, no fingerprinting).</p>
+
+        <h3>2.1 Account &amp; authentication data</h3>
         <ul>
-            <li><strong>TikTok Authorization:</strong> OAuth2 access token and refresh token required to publish videos on your behalf.</li>
-            <li><strong>Content Data:</strong> Video files, titles, descriptions, and tags that you explicitly provide for publishing.</li>
-            <li><strong>Basic Profile:</strong> Your TikTok open ID and basic account info provided through the TikTok API.</li>
+            <li><strong>TikTok:</strong> OAuth 2.0 <em>access token</em>, <em>refresh token</em>, <em>open_id</em>, and the <em>scopes</em> you authorized (currently: <code>user.info.basic</code>, <code>video.publish</code>, <code>video.upload</code>).</li>
+            <li><strong>Facebook:</strong> OAuth 2.0 <em>user access token</em>, <em>app-scoped user ID</em>, and the <em>permissions</em> you granted (currently: <code>pages_show_list</code>, <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_manage_engagement</code>, <code>public_profile</code>, <code>email</code>).</li>
+            <li><strong>Instagram (via Facebook Graph):</strong> <em>IG user/business account ID</em> linked to the authorized Facebook Page, and a Page access token with the <code>instagram_basic</code>, <code>instagram_content_publish</code>, and <code>instagram_manage_insights</code> permissions.</li>
         </ul>
 
-        <h2>2. How We Use Your Information</h2>
+        <h3>2.2 Content data you provide</h3>
         <ul>
-            <li>To authenticate your TikTok account via OAuth2</li>
-            <li>To upload and publish video content you create to your TikTok account</li>
-            <li>To manage and track published content</li>
+            <li>Video files (mp4) you upload for publishing.</li>
+            <li>Text and metadata: title, caption, description, hashtags, scheduled publish time, thumbnail preference.</li>
+            <li>Publishing configuration: which TikTok / Facebook Page / Instagram account to post to, the schedule calendar, and your draft-vs-publish choices.</li>
         </ul>
 
-        <h2>3. What We Do NOT Do</h2>
+        <h3>2.3 Operational data</h3>
         <ul>
-            <li>We do <strong>not</strong> sell, rent, or trade your personal information</li>
-            <li>We do <strong>not</strong> share your data with third parties</li>
-            <li>We do <strong>not</strong> access your private messages or contacts</li>
-            <li>We do <strong>not</strong> collect browsing history or device information</li>
-            <li>We do <strong>not</strong> use your data for advertising purposes</li>
+            <li>Publish logs (timestamps, post IDs returned by each platform, success/failure status).</li>
+            <li>Application errors (sanitized — no tokens or passwords ever logged).</li>
         </ul>
 
-        <h2>4. Data Storage & Security</h2>
-        <p>All authentication tokens are stored securely with encryption on our private servers. We implement industry-standard security measures to protect your data from unauthorized access, alteration, or disclosure.</p>
+        <h3>2.4 What we DO NOT collect</h3>
+        <ul>
+            <li>Your TikTok / Facebook / Instagram password (we never see it; OAuth is used).</li>
+            <li>Private messages, friend lists, followers, or contacts.</li>
+            <li>Browsing history, device identifiers, advertising IDs, or location data.</li>
+            <li>Biometric, financial, or government-identification data.</li>
+            <li>Data from users who have not authorized our app.</li>
+        </ul>
 
-        <h2>5. Data Retention</h2>
-        <p>We retain your OAuth tokens only as long as necessary to provide the service. You may revoke access at any time through your TikTok account settings, which immediately invalidates all stored tokens.</p>
+        <h2>3. How We Use Your Information (Lawful Basis)</h2>
+        <table>
+            <tr><th>Data</th><th>Purpose</th><th>Legal basis (GDPR)</th></tr>
+            <tr><td>OAuth tokens</td><td>Authenticate API requests to the platform on your behalf</td><td>Contract performance (Art. 6(1)(b))</td></tr>
+            <tr><td>Video files + metadata</td><td>Upload and publish content per your instruction</td><td>Contract performance (Art. 6(1)(b))</td></tr>
+            <tr><td>Publish logs</td><td>Show you post history and debug failures</td><td>Legitimate interest (Art. 6(1)(f))</td></tr>
+            <tr><td>Email address (if provided)</td><td>Respond to your support requests</td><td>Consent (Art. 6(1)(a))</td></tr>
+        </table>
+        <p>We do not use any of this data for automated decision-making, profiling, or advertising.</p>
 
-        <h2>6. Third-Party Services</h2>
-        <p>This application integrates with the TikTok Content Posting API. Your use of TikTok is governed by TikTok's own Terms of Service and Privacy Policy.</p>
+        <h2>4. Third-Party Services &amp; API Permissions</h2>
+        <p>To publish on your behalf, our backend servers make calls to the following third-party APIs. Your use of each platform is governed by that platform's own terms.</p>
+
+        <h3>4.1 TikTok — Content Posting API</h3>
+        <ul>
+            <li><strong>Endpoint providers:</strong> TikTok (ByteDance Ltd.)</li>
+            <li><strong>Permissions used:</strong> <code>user.info.basic</code> (read display name, avatar), <code>video.publish</code> (publish to your account), <code>video.upload</code> (upload source file).</li>
+            <li><strong>Data shared with TikTok:</strong> video file, caption, hashtags, and the access token identifying you.</li>
+            <li><strong>Data received from TikTok:</strong> post ID, publish status, basic profile (display name, open_id).</li>
+            <li><strong>Privacy policy:</strong> <a href="https://www.tiktok.com/legal/privacy-policy">https://www.tiktok.com/legal/privacy-policy</a></li>
+        </ul>
+
+        <h3>4.2 Meta (Facebook &amp; Instagram) — Graph API</h3>
+        <ul>
+            <li><strong>Endpoint providers:</strong> Meta Platforms, Inc.</li>
+            <li><strong>Facebook permissions used:</strong> <code>public_profile</code>, <code>email</code>, <code>pages_show_list</code>, <code>pages_manage_posts</code>, <code>pages_read_engagement</code>, <code>pages_manage_engagement</code>.</li>
+            <li><strong>Instagram permissions used (via Business Login):</strong> <code>instagram_basic</code>, <code>instagram_content_publish</code>, <code>instagram_manage_insights</code>.</li>
+            <li><strong>Data shared with Meta:</strong> video file, caption, the target Page ID / IG user ID, and the access token identifying you.</li>
+            <li><strong>Data received from Meta:</strong> post ID, publish status, Page name, Page ID, IG user ID, and basic profile (name, email if granted).</li>
+            <li><strong>Privacy policy:</strong> <a href="https://www.facebook.com/privacy/policy/">https://www.facebook.com/privacy/policy/</a></li>
+            <li><strong>Instagram-specific:</strong> <a href="https://privacycenter.instagram.com/policy">https://privacycenter.instagram.com/policy</a></li>
+        </ul>
+
+        <h3>4.3 No other third parties</h3>
+        <p>We do not embed any analytics, advertising, or social-tracking SDKs. We do not share your data with data brokers, marketing partners, or any other third party not listed above.</p>
+
+        <h2>5. Data Storage &amp; Security</h2>
+        <ul>
+            <li>OAuth tokens are stored encrypted at rest (AES-256) on private servers with restricted access.</li>
+            <li>All HTTP traffic uses TLS 1.2+ (HTTPS).</li>
+            <li>Video files are stored only as long as needed to complete the publish job (typically deleted within 24 hours of successful upload).</li>
+            <li>Access to production data is restricted to the app operator and protected by multi-factor authentication.</li>
+            <li>We perform periodic security reviews and rotate keys on a documented schedule.</li>
+        </ul>
+        <p>No method of transmission or storage is 100% secure. If a breach occurs, we will notify affected users and the relevant supervisory authority within 72 hours, in line with GDPR Art. 33.</p>
+
+        <h2>6. Data Retention</h2>
+        <ul>
+            <li><strong>OAuth tokens:</strong> retained until you revoke access or delete your account. Refresh tokens are deleted on logout.</li>
+            <li><strong>Video files:</strong> deleted within 24 hours of a successful publish, or immediately upon a failed publish.</li>
+            <li><strong>Publish logs (post ID, status, timestamp):</strong> retained for 12 months for debugging, then anonymized.</li>
+            <li><strong>Support emails:</strong> retained for 24 months, then deleted.</li>
+        </ul>
 
         <h2>7. Your Rights</h2>
+        <p>Regardless of where you live, you have the following rights:</p>
         <ul>
-            <li>Revoke access at any time via TikTok settings</li>
-            <li>Request deletion of all stored data</li>
-            <li>Contact us with any privacy concerns</li>
+            <li><strong>Access:</strong> request a copy of all data we hold about you.</li>
+            <li><strong>Correction:</strong> ask us to fix inaccurate data.</li>
+            <li><strong>Deletion:</strong> ask us to erase all your data — performed within 30 days.</li>
+            <li><strong>Portability:</strong> receive your data in a machine-readable format.</li>
+            <li><strong>Object / restrict processing:</strong> opt out of any optional processing.</li>
+            <li><strong>Withdraw consent:</strong> at any time, with no retroactive effect.</li>
+            <li><strong>Lodge a complaint:</strong> with your local data-protection authority.</li>
         </ul>
 
-        <h2>8. Children's Privacy</h2>
-        <p>While our content is educational and family-friendly, this tool is intended for use by adult content creators. We do not knowingly collect data from children under 13.</p>
+        <h3>7.1 How to exercise these rights</h3>
+        <p>Email <code>qeloria.publisher@gmail.com</code> with the subject line <em>"Privacy Request"</em>. We verify identity before acting and respond within 30 days.</p>
 
-        <h2>9. Contact</h2>
-        <p>For privacy inquiries, please contact: <strong>qeloria.publisher@gmail.com</strong></p>
+        <h3>7.2 How to revoke platform access (Meta &amp; TikTok requirements)</h3>
+        <ul>
+            <li><strong>TikTok:</strong> TikTok app → Profile → Menu → Settings and privacy → Security → Manage app permissions → Qeloria Content Publisher → <em>Remove</em>.</li>
+            <li><strong>Facebook:</strong> Settings &amp; privacy → Settings → Business integrations → Qeloria Content Publisher → <em>Remove</em>.</li>
+            <li><strong>Instagram:</strong> Settings → Account Center → Your information and permissions → Apps and websites → Qeloria Content Publisher → <em>Remove</em>.</li>
+        </ul>
+        <p>Revoking access through the platform immediately invalidates our stored tokens. We additionally delete the token record from our database within 24 hours.</p>
+
+        <h2>8. Data Deletion Request (Meta App Review requirement)</h2>
+        <p>Per Meta's Platform Terms, we provide the following self-service data-deletion endpoint and instructions:</p>
+        <div class="warning">
+            <strong>Data Deletion Instructions</strong><br>
+            You may request deletion of all data we hold about you at any time by either:
+            <ol style="margin-left: 20px; margin-top: 8px;">
+                <li>Using our in-app <em>"Delete my data"</em> button, OR</li>
+                <li>Emailing <code>qeloria.publisher@gmail.com</code> with the subject <em>"Delete my data"</em> from the email address associated with your Qeloria account.</li>
+            </ol>
+            <br>
+            We will delete your account, OAuth tokens, video files, and publish logs within 30 days and send a confirmation email.
+        </div>
+
+        <h2>9. Children's Privacy</h2>
+        <p>Our service is intended for adult content creators. We do not knowingly collect data from children under 13 (COPPA) or under 16 (GDPR). If you believe a child has used our service, contact us and we will delete the data within 7 days.</p>
+
+        <h2>10. International Data Transfers</h2>
+        <p>Our servers are located in the European Union. When we call TikTok or Meta APIs, data may be transferred to and processed in the United States, Singapore, or other jurisdictions where these providers operate. We rely on the European Commission's Standard Contractual Clauses (SCCs) and the providers' respective Data Privacy Framework certifications for such transfers.</p>
+
+        <h2>11. Compliance</h2>
+        <p>This policy and our practices are designed to comply with:</p>
+        <ul>
+            <li>GDPR (EU 2016/679) and the UK GDPR</li>
+            <li>CCPA / CPRA (California)</li>
+            <li>COPPA (children under 13, US)</li>
+            <li>Meta Platform Terms &amp; Meta Developer Policy</li>
+            <li>TikTok Developer Terms of Service &amp; Content Posting API Terms</li>
+        </ul>
+
+        <h2>12. Changes to This Policy</h2>
+        <p>We may update this policy. Material changes will be announced by email (if you have an account) and by posting the updated version on this page with a new "Last updated" date. Continued use after a change constitutes acceptance.</p>
+
+        <h2>13. Contact</h2>
+        <p>Privacy questions, deletion requests, and any concerns:<br>
+        <strong>Email:</strong> <code>qeloria.publisher@gmail.com</code><br>
+        <strong>Response time:</strong> within 30 days</p>
 
         <div class="footer">
-            <p>© 2025 Qeloria Content Publisher. All rights reserved.</p>
+            <p>© 2025–2026 Qeloria Content Publisher. All rights reserved.</p>
         </div>
     </div>
 </body>
