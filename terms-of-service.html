@@ -16,6 +16,8 @@
         ul, ol { margin-left: 24px; margin-bottom: 14px; }
         li { margin-bottom: 8px; }
         .highlight { background: #fff8f0; padding: 16px; border-radius: 8px; border-left: 4px solid #ff9f43; margin: 16px 0; }
+        .allowed { background: #ecfdf5; padding: 16px; border-radius: 8px; border-left: 4px solid #10b981; margin: 16px 0; }
+        .prohibited { background: #fef2f2; padding: 16px; border-radius: 8px; border-left: 4px solid #ef4444; margin: 16px 0; }
         .footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; color: #999; font-size: 13px; }
         code { background: #f4f4f6; padding: 2px 6px; border-radius: 3px; font-size: 13px; }
     </style>
@@ -26,103 +28,130 @@
         <p class="subtitle">Qeloria Content Publisher — Last updated: June 8, 2026</p>
 
         <div class="highlight">
-            <strong>Please read carefully:</strong> By connecting your TikTok, Facebook, or Instagram account to Qeloria Content Publisher, you agree to these Terms of Service. This tool is designed to help educational content creators publish videos to these platforms efficiently and responsibly, in full compliance with each platform's Developer Policies and Terms.
+            <strong>Please read carefully:</strong> By connecting your TikTok, Facebook, or Instagram account to Qeloria Content Publisher, you agree to these Terms of Service. This tool exists for one purpose: to help educational content creators <strong>upload, publish, edit, and manage</strong> videos, photos, and posts on their own Facebook Pages, Instagram Business accounts, and TikTok account, and to <strong>reply to audience comments</strong> on the content they have published — all in full compliance with each platform's Developer Policies and Terms.
         </div>
 
         <h2>1. Acceptance of Terms</h2>
         <p>By installing, connecting, or otherwise using Qeloria Content Publisher (the "Service"), you agree to be bound by these Terms of Service ("Terms") and our <a href="privacy-policy.html">Privacy Policy</a>. If you do not agree, do not use the Service.</p>
 
         <h2>2. Description of the Service</h2>
-        <p>Qeloria Content Publisher is a content-management tool that allows educational creators to publish short-form videos to the following platforms through their respective official APIs:</p>
+        <p>Qeloria Content Publisher is a content-management tool that allows educational creators to perform the following operations on <strong>their own</strong> Facebook Pages, Instagram Business / Creator accounts, and TikTok account, through each platform's official API:</p>
+
+        <div class="allowed">
+            <strong>✅ The Service's only authorized functions:</strong>
+            <ol style="margin-left: 20px; margin-top: 8px;">
+                <li><strong>Uploading videos</strong> to the user's Facebook Pages, Instagram Business/Creator account, and TikTok account.</li>
+                <li><strong>Publishing posts</strong> — text posts, photo posts, and video posts (including Reels) — to the user's Facebook Pages, Instagram, and TikTok account.</li>
+                <li><strong>Editing videos</strong> — basic in-app editing (trimming, cropping, adding text overlay, merging clips) on the user's own videos before publication.</li>
+                <li><strong>Editing video metadata</strong> — changing the video <em>title</em>, <em>caption / description</em>, <em>hashtags</em>, <em>thumbnail / cover image</em>, and <em>privacy / visibility settings</em> of content the user has already published via the app.</li>
+                <li><strong>Replying to audience comments</strong> — posting text replies (and hiding or deleting the user's own comments) on the user's own published posts and videos on Facebook Pages, Instagram, and TikTok.</li>
+            </ol>
+        </div>
+
+        <p>Every action listed above is initiated explicitly by the user from inside the Qeloria Content Publisher interface. The Service does not perform any of these actions autonomously, in bulk, on behalf of a third party, or for any user who has not authorized the app.</p>
+
+        <h2>3. Prohibited Use of the Service</h2>
+        <p>To make the scope of the Service explicit — and to comply with Meta Platform Terms §3 and the TikTok API Terms of Service — the following uses are <strong>strictly prohibited</strong>:</p>
+
+        <div class="prohibited">
+            <strong>❌ You agree NOT to use the Service to:</strong>
+            <ul style="margin-left: 20px; margin-top: 8px;">
+                <li>Read, collect, scrape, or export any user's <em>friends list, followers, contact list, or private messages</em> — including your own list of followers if it would be processed for any purpose other than displaying them to you inside the app.</li>
+                <li>Read or share <em>non-public profile fields</em> or sensitive personal data of any user (race, religion, health, sexual orientation, political views, financial data, government ID).</li>
+                <li>Perform <em>automated mass actions</em> (mass-following, mass-liking, mass-commenting) or any behaviour that resembles spam, fake engagement, or platform-integrity violations.</li>
+                <li>Resell, syndicate, or transfer any data obtained through the platform APIs to any third party, data broker, advertising network, or AI training pipeline.</li>
+                <li>Target users with advertising, retargeting, lookalike modelling, or attribution measurement.</li>
+                <li>Perform surveillance, background checks, facial recognition, or any biometric processing.</li>
+                <li>Publish content you do not own or have explicit rights to publish.</li>
+                <li>Publish illegal, defamatory, infringing, hateful, harassing, deceptive, sexually explicit, violent, or otherwise prohibited content.</li>
+                <li>Act on a Facebook Page, Instagram account, or TikTok account that you do not own or have explicit written authorization to manage.</li>
+            </ul>
+        </div>
+
+        <p>Violation of any of the above is grounds for immediate termination of your account (see §12) and may be reported to the relevant platform.</p>
+
+        <h2>4. Eligibility</h2>
+        <p>You must be at least 18 years old (or the age of digital consent in your jurisdiction, whichever is higher) to use this Service. You represent and warrant that:</p>
         <ul>
-            <li><strong>TikTok</strong> — via the TikTok Content Posting API</li>
-            <li><strong>Facebook Pages</strong> — via the Meta Graph API (<code>pages_manage_posts</code>, <code>pages_show_list</code>)</li>
-            <li><strong>Instagram</strong> — via the Meta Graph API (<code>instagram_content_publish</code>) on Instagram Business or Creator accounts</li>
-        </ul>
-        <p>The Service provides the following features:</p>
-        <ul>
-            <li>Upload video files and metadata (title, caption, hashtags, thumbnail).</li>
-            <li>Publish immediately or schedule publication to a specific date and time.</li>
-            <li>Manage multiple connected accounts across the supported platforms.</li>
-            <li>Track publish status and retrieve post IDs from each platform.</li>
-            <li>Delete previously published content via the platform APIs (where supported).</li>
+            <li>You have the legal capacity to enter into these Terms.</li>
+            <li>The Facebook Page, Instagram Business/Creator account, and TikTok account you connect are owned by you, or you have explicit written authorization from the owner to act on them.</li>
+            <li>You (and any account on whose behalf you act) have agreed to the platform's own Terms of Service.</li>
         </ul>
 
-        <h2>3. Eligibility</h2>
-        <p>You must be at least 18 years old (or the age of digital consent in your jurisdiction, whichever is higher) to use this Service. You represent that you have the legal capacity to enter into these Terms and that the account(s) you connect belong to you or that you have explicit authorization to act on them.</p>
-
-        <h2>4. User Responsibilities</h2>
-        <p>You agree that you are solely responsible for the content you upload and publish through the Service. Specifically, you agree that you will:</p>
+        <h2>5. User Responsibilities</h2>
+        <p>You agree that you are solely responsible for the content you upload, publish, edit, or comment through the Service. Specifically, you agree that you will:</p>
         <ul>
-            <li>Own or have all necessary rights, licenses, and consents to every piece of content (video, audio, image, text) you publish.</li>
+            <li>Own or have all necessary rights, licenses, and consents to every piece of content (video, audio, image, text) you publish, including the right to edit and re-publish it.</li>
             <li>Ensure that you hold the rights to any music, voice, or copyrighted material embedded in your videos, including any required synchronization, mechanical, or neighboring rights.</li>
             <li>Obtain all necessary consents from identifiable individuals featured in your content (right of publicity, GDPR Art. 6/9 where applicable).</li>
+            <li>Ensure every reply you post to a comment on your own content complies with the platform's community standards.</li>
             <li>Comply with TikTok's <a href="https://www.tiktok.com/community-guidelines">Community Guidelines</a>, TikTok's <a href="https://developers.tiktok.com/doc/tiktok-api-terms-of-service">API Terms of Service</a>, and TikTok's Music Usage Rules.</li>
             <li>Comply with Meta's <a href="https://developers.facebook.com/terms">Platform Terms</a>, the <a href="https://developers.facebook.com/devpolicy/">Meta Developer Policy</a>, Facebook's <a href="https://www.facebook.com/communitystandards/">Community Standards</a>, and Instagram's <a href="https://help.instagram.com/477434105621119">Community Guidelines</a>.</li>
             <li>Not publish content that is illegal, defamatory, infringing, hateful, harassing, deceptive, sexually explicit, violent, or otherwise prohibited by any of the above policies or by applicable law.</li>
             <li>Maintain the security of any device or account you use to access the Service.</li>
         </ul>
 
-        <h2>5. Platform Authorization &amp; OAuth Scopes</h2>
-        <p>The Service uses the official OAuth 2.0 authorization flows of each platform. We <strong>never</strong> ask for or store your TikTok, Facebook, or Instagram password. You authorize the Service to act on your behalf with the following minimum scopes:</p>
+        <h2>6. Platform Authorization &amp; OAuth Scopes (mapped to authorized functions)</h2>
+        <p>The Service uses the official OAuth 2.0 authorization flows of each platform. We <strong>never</strong> ask for or store your TikTok, Facebook, or Instagram password. You authorize the Service to act on your behalf with the following minimum scopes — each of which is needed for one of the authorized functions in §2:</p>
 
-        <h3>5.1 TikTok scopes</h3>
+        <h3>6.1 TikTok scopes</h3>
         <ul>
-            <li><code>user.info.basic</code> — read your TikTok display name and avatar.</li>
-            <li><code>video.publish</code> — publish videos to your TikTok account.</li>
-            <li><code>video.upload</code> — upload source video files to TikTok servers.</li>
+            <li><code>user.info.basic</code> — read your TikTok display name and avatar (account identification).</li>
+            <li><code>video.upload</code> — upload source video files to TikTok servers (function: upload videos).</li>
+            <li><code>video.publish</code> — publish uploaded videos to your TikTok account (function: publish posts / videos).</li>
+            <li><code>video.list</code> — list your previously published videos so the app can show them for metadata editing (function: edit video metadata).</li>
+            <li><code>comment.list</code> — read comments on your published videos (function: reply to comments).</li>
+            <li><code>comment.post</code> / <code>comment.reply</code> — post replies to comments on your videos (function: reply to comments).</li>
         </ul>
 
-        <h3>5.2 Facebook scopes</h3>
+        <h3>6.2 Facebook scopes</h3>
         <ul>
             <li><code>public_profile</code>, <code>email</code> — basic identity.</li>
             <li><code>pages_show_list</code> — list Facebook Pages you manage.</li>
-            <li><code>pages_manage_posts</code> — publish posts and Reels to those Pages.</li>
-            <li><code>pages_read_engagement</code>, <code>pages_manage_engagement</code> — read and reply to comments on published posts.</li>
+            <li><code>pages_manage_posts</code> — create, edit, and delete posts and Reels on your Pages (functions: upload, publish, edit video, edit metadata).</li>
+            <li><code>pages_read_engagement</code> — read comments on your Page posts (function: reply to comments).</li>
+            <li><code>pages_manage_engagement</code> — post replies to comments on your Page posts (function: reply to comments).</li>
         </ul>
 
-        <h3>5.3 Instagram scopes</h3>
+        <h3>6.3 Instagram scopes</h3>
         <ul>
             <li><code>instagram_basic</code> — read IG business account profile.</li>
-            <li><code>instagram_content_publish</code> — publish Reels and posts to IG.</li>
+            <li><code>instagram_content_publish</code> — publish Reels and posts to IG (functions: upload, publish).</li>
             <li><code>instagram_manage_insights</code> — read post performance metrics.</li>
+            <li><code>instagram_manage_comments</code> — read and reply to comments on your IG posts (function: reply to comments).</li>
         </ul>
 
         <p>You may revoke any of these permissions at any time through the platform's own settings (TikTok app → Settings and privacy → Security → Manage app permissions; Facebook → Settings &amp; privacy → Business integrations; Instagram → Account Center → Apps and websites). Revocation immediately stops our ability to act on your behalf; the Service will stop functioning until you re-authorize.</p>
 
-        <h2>6. Acceptable Use</h2>
-        <p>The Service is intended for publishing original, family-friendly, educational content such as English-language learning materials. You agree <strong>not</strong> to use the Service to:</p>
+        <h2>7. Acceptable Use</h2>
+        <p>In addition to the prohibited uses in §3, the Service is intended exclusively for publishing original, family-friendly, educational content such as English-language learning materials. You agree <strong>not</strong> to use the Service to:</p>
         <ul>
             <li>Publish spam, repetitive, or mass unsolicited content.</li>
-            <li>Publish content you do not own, or that infringes any third party's intellectual property, publicity, or privacy rights.</li>
-            <li>Publish misleading, deceptive, or fraudulent content (including deepfakes or manipulated media without disclosure).</li>
-            <li>Publish hate speech, harassment, threats, or content that incites violence.</li>
-            <li>Publish sexually explicit, pornographic, or exploitative content involving minors.</li>
-            <li>Publish content that promotes illegal activity, regulated goods (drugs, weapons, gambling), or activity prohibited by any of the integrated platforms.</li>
             <li>Circumvent, disable, or otherwise interfere with the Service's rate limits, security features, or audit logging.</li>
-            <li>Use the Service to scrape, bulk-collect, or resell data obtained through the platform APIs.</li>
             <li>Use the Service in any way that violates Meta's <a href="https://developers.facebook.com/devpolicy/">Developer Policy</a> (including section on Platform Integrity) or TikTok's <a href="https://developers.tiktok.com/doc/tiktok-api-terms-of-service">API Terms of Service</a>.</li>
         </ul>
 
-        <h2>7. Content Ownership &amp; License</h2>
-        <p>You retain full ownership of all content you create and publish through the Service. We claim no rights to your videos, captions, hashtags, or any other creative material. By using the Service, you grant us a <strong>limited, non-exclusive, royalty-free, revocable license</strong> to:</p>
+        <h2>8. Content Ownership &amp; License</h2>
+        <p>You retain full ownership of all content you create, publish, edit, and reply to through the Service. We claim no rights to your videos, photos, captions, hashtags, or any other creative material. By using the Service, you grant us a <strong>limited, non-exclusive, royalty-free, revocable license</strong> to:</p>
         <ul>
-            <li>Upload your video and metadata to the platform(s) of your choice via their official APIs.</li>
-            <li>Store your video temporarily (up to 24 hours) for the purpose of completing the upload.</li>
-            <li>Store publish logs (post ID, timestamp, status) for up to 12 months.</li>
+            <li>Process your videos and photos (upload, edit, transcode) for the purpose of the authorized functions in §2.</li>
+            <li>Upload your video, photo, and metadata to the platform(s) of your choice via their official APIs.</li>
+            <li>Store your source files temporarily (up to 24 hours) and your edited video outputs (up to 30 days, for your re-use).</li>
+            <li>Store publish / edit / reply logs (post ID, comment ID, timestamp, status) for up to 12 months.</li>
         </ul>
-        <p>This license terminates when you delete your account, revoke platform authorization, or when the underlying publish operation completes — whichever comes first.</p>
+        <p>This license terminates when you delete your account, revoke platform authorization, or when the underlying operation completes — whichever comes first.</p>
 
-        <h2>8. Data We Process (Summary)</h2>
+        <h2>9. Data We Process (Summary)</h2>
         <p>For a complete description of the data we collect, store, share, and your rights over it, see our <a href="privacy-policy.html">Privacy Policy</a>. In short:</p>
         <ul>
             <li>Encrypted OAuth tokens (TikTok, Facebook, Instagram).</li>
-            <li>Video files (transient, ≤ 24h).</li>
-            <li>Publish logs (≤ 12 months).</li>
+            <li>Source video / photo files (transient, ≤ 24h).</li>
+            <li>Edited video outputs (≤ 30 days).</li>
+            <li>Publish / edit / reply logs (≤ 12 months).</li>
             <li>Support emails (≤ 24 months).</li>
         </ul>
 
-        <h2>9. Rate Limits &amp; API Hygiene</h2>
+        <h2>10. Rate Limits &amp; API Hygiene</h2>
         <p>The Service respects each platform's published rate limits and uses exponential backoff on 429 responses. You agree not to:</p>
         <ul>
             <li>Attempt to circumvent rate limits by creating multiple accounts or routing requests through proxies.</li>
@@ -130,7 +159,7 @@
         </ul>
         <p>We may, at our sole discretion, throttle or suspend your use of the Service if we detect activity that may trigger a platform-level enforcement action against our app credentials.</p>
 
-        <h2>10. Third-Party Platforms (No Liability for Their Actions)</h2>
+        <h2>11. Third-Party Platforms (No Liability for Their Actions)</h2>
         <p>The Service depends on the continued availability of the TikTok, Facebook, and Instagram APIs. We are not responsible for:</p>
         <ul>
             <li>Changes to API endpoints, scopes, or terms made by the platforms.</li>
@@ -139,20 +168,18 @@
             <li>Loss of data, views, engagement, or revenue resulting from the above.</li>
         </ul>
 
-        <h2>11. Service Availability &amp; Changes</h2>
+        <h2>12. Service Availability, Changes &amp; Termination</h2>
         <p>The Service is provided "as is" and "as available." We may modify, suspend, or discontinue any feature at any time, with or without notice, including in response to platform-side changes. We will not be liable for any loss resulting from such changes.</p>
-
-        <h2>12. Termination</h2>
-        <p>You may terminate this agreement at any time by revoking platform authorization in your account settings and requesting data deletion (see <a href="privacy-policy.html#8">Privacy Policy §8</a>). We may terminate or suspend your access if:</p>
+        <p>You may terminate this agreement at any time by revoking platform authorization in your account settings and requesting data deletion (see <a href="privacy-policy.html#10">Privacy Policy §10</a>). We may terminate or suspend your access if:</p>
         <ul>
-            <li>You breach these Terms.</li>
+            <li>You breach these Terms (including any prohibited use in §3).</li>
             <li>Your activity triggers a platform-level enforcement action that risks our app credentials.</li>
             <li>Required by law.</li>
         </ul>
-        <p>Upon termination, we delete your tokens, video files, and publish logs within 30 days.</p>
+        <p>Upon termination, we delete your tokens, source files, edited outputs, and logs within 30 days.</p>
 
         <h2>13. Disclaimers &amp; Limitation of Liability</h2>
-        <p>To the maximum extent permitted by law, the Service is provided <strong>WITHOUT WARRANTY OF ANY KIND</strong>, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the Service will be uninterrupted, error-free, or that publish operations will always succeed.</p>
+        <p>To the maximum extent permitted by law, the Service is provided <strong>WITHOUT WARRANTY OF ANY KIND</strong>, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, and non-infringement. We do not warrant that the Service will be uninterrupted, error-free, or that any single upload, publish, edit, or comment-reply operation will always succeed.</p>
         <p>In no event shall Qeloria, its operator, or its affiliates be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, revenue, data, or goodwill, arising from your use of (or inability to use) the Service. Our total aggregate liability for any claim shall not exceed the greater of (a) the amount you paid us in the 12 months preceding the claim, or (b) EUR 100.</p>
 
         <h2>14. Indemnification</h2>
