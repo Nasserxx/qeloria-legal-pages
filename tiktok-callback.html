@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Authorization Callback — Qeloria</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #4361ee 0%, #1a1a2e 100%); color: #fff; line-height: 1.6; min-height: 100vh; padding: 40px 20px; }
+        .container { max-width: 720px; margin: 0 auto; }
+        .card { background: rgba(255,255,255,0.08); padding: 40px; border-radius: 16px; backdrop-filter: blur(10px); }
+        h1 { font-size: 28px; margin-bottom: 16px; }
+        .success { color: #10b981; }
+        .error { color: #fe2c55; }
+        .code-box { background: #0a0e1a; border: 1px solid rgba(0,242,234,0.3); border-radius: 8px; padding: 20px; margin: 20px 0; word-break: break-all; font-family: 'Courier New', monospace; font-size: 14px; user-select: all; cursor: pointer; }
+        .code-box:hover { background: #1a1f2e; }
+        .copy-btn { display: inline-block; padding: 14px 28px; background: #00f2ea; color: #000; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin: 12px 8px 12px 0; }
+        .copy-btn:hover { background: #10b981; }
+        .copy-btn.copied { background: #10b981; color: #fff; }
+        .home-btn { display: inline-block; padding: 14px 28px; background: rgba(255,255,255,0.1); color: #fff; text-decoration: none; border-radius: 8px; font-size: 16px; margin: 12px 0; }
+        .step { background: rgba(0,242,234,0.1); border-left: 4px solid #00f2ea; padding: 16px; margin: 16px 0; border-radius: 4px; }
+        .step-num { display: inline-block; width: 28px; height: 28px; background: #00f2ea; color: #000; border-radius: 50%; text-align: center; line-height: 28px; font-weight: 700; margin-right: 8px; }
+        code { background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 3px; font-family: 'Courier New', monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>🎬 TikTok Authorization Callback</h1>
+            <div id="status"></div>
+            <div id="content"></div>
+            <a href="https://qeloria.com/" class="home-btn">← Back to Qeloria</a>
+        </div>
+    </div>
+
+    <script>
+        // Parse the OAuth callback parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+
+        const statusDiv = document.getElementById('status');
+        const contentDiv = document.getElementById('content');
+
+        if (error) {
+            // Authorization denied or failed
+            statusDiv.innerHTML = '<h2 class="error">❌ Authorization Failed</h2>';
+            contentDiv.innerHTML = `
+                <p>TikTok returned an error:</p>
+                <div class="code-box"><strong>${error}</strong>${errorDescription ? '<br><br>' + errorDescription : ''}</div>
+                <p>Please try again from <a href="https://qeloria.com/" style="color:#00f2ea;">qeloria.com</a>.</p>
+            `;
+        } else if (code) {
+            // Success! Display the code
+            statusDiv.innerHTML = '<h2 class="success">✅ Authorization Successful</h2>';
+            contentDiv.innerHTML = `
+                <p>Your TikTok account has been authorized. Copy the <strong>authorization code</strong> below and send it to the Qeloria Publisher backend to complete the connection.</p>
+
+                <div class="step">
+                    <span class="step-num">1</span>
+                    <strong>Click the copy button</strong> to copy the code.
+                </div>
+
+                <div class="code-box" id="codeBox" title="Click to copy">${code}</div>
+
+                <button class="copy-btn" id="copyBtn" onclick="copyCode()">📋 Copy Authorization Code</button>
+                <button class="copy-btn" id="copyUrlBtn" onclick="copyUrl()">🔗 Copy Full Callback URL</button>
+
+                <div class="step">
+                    <span class="step-num">2</span>
+                    Send the code to the Qeloria backend. The backend exchanges this code for a long-lived access token via TikTok's <code>POST /v2/oauth/token/</code> endpoint.
+                </div>
+
+                <p style="margin-top: 24px; opacity: 0.7; font-size: 14px;">
+                    <strong>State (CSRF token):</strong> <code>${state || '(none)'}</code>
+                </p>
+            `;
+
+            // Auto-copy to clipboard
+            navigator.clipboard.writeText(code).then(() => {
+                document.getElementById('copyBtn').textContent = '✅ Copied!';
+                document.getElementById('copyBtn').classList.add('copied');
+            }).catch(() => {
+                // Fallback: select text in code box
+                const range = document.createRange();
+                range.selectNode(document.getElementById('codeBox'));
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+            });
+        } else {
+            // No code, no error — user navigated here directly
+            statusDiv.innerHTML = '<h2>ℹ️ No Authorization Data</h2>';
+            contentDiv.innerHTML = `
+                <p>This page is the OAuth callback for Qeloria's TikTok integration. You should only see this page after authorizing the app on TikTok.</p>
+                <p>To start the authorization flow, visit <a href="https://qeloria.com/" style="color:#00f2ea;">qeloria.com</a> and click <strong>"Connect with TikTok"</strong>.</p>
+            `;
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.textContent = '✅ Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy Authorization Code';
+                    btn.classList.remove('copied');
+                }, 3000);
+            });
+        }
+
+        function copyUrl() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                const btn = document.getElementById('copyUrlBtn');
+                btn.textContent = '✅ URL Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '🔗 Copy Full Callback URL';
+                    btn.classList.remove('copied');
+                }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>
