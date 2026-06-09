@@ -86,8 +86,16 @@
         .caption-field input { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; font-size: 14px; }
         .caption-field input::placeholder { color: rgba(255,255,255,0.4); }
         .publish-options { margin-top: 16px; padding: 16px; background: rgba(0,0,0,0.2); border-radius: 10px; }
-        .publish-options label.block-label { display: block; font-size: 14px; margin-bottom: 8px; opacity: 0.95; }
-        .publish-options select, .publish-options input[type="text"] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.35); color: #fff; font-size: 14px; }
+        .publish-options .field-group { margin: 14px 0; }
+        .publish-options label.block-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; opacity: 1; color: #fff; }
+        .publish-options .required-mark { color: #fe2c55; margin-left: 2px; }
+        .publish-options input[type="text"] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.35); color: #fff; font-size: 14px; box-sizing: border-box; }
+        .publish-options .select-wrap { position: relative; width: 100%; }
+        .publish-options .select-wrap::after { content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #00f2ea; font-size: 14px; }
+        .publish-options select { width: 100%; padding: 12px 36px 12px 12px; border-radius: 8px; border: 1px solid rgba(0,242,234,0.35); background: rgba(0,0,0,0.5); color: #fff; font-size: 14px; box-sizing: border-box; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; display: block; }
+        .publish-options select:focus { outline: none; border-color: #00f2ea; box-shadow: 0 0 0 2px rgba(0,242,234,0.2); }
+        .publish-options select option { background: #1a1a2e; color: #fff; padding: 8px; }
+        .publish-options select option:disabled { color: rgba(255,255,255,0.45); }
         .publish-options .check-row { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 10px 0; font-size: 14px; }
         .publish-options .check-row label { display: flex; align-items: center; gap: 8px; cursor: pointer; opacity: 0.95; }
         .publish-options .check-row input:disabled + span { opacity: 0.45; cursor: not-allowed; }
@@ -167,19 +175,26 @@
                     <input type="text" id="videoCaption" placeholder="English learning tip #qeloria #learnenglish" maxlength="2200">
                 </div>
 
-                <label class="block-label" for="privacyLevel">Who can view this video *</label>
-                <select id="privacyLevel" onchange="onPublishFormChange()">
-                    <option value="" selected disabled>Select privacy…</option>
-                </select>
-                <p class="hint" id="privacyHint"></p>
+                <div class="field-group privacy-field">
+                    <label class="block-label" for="privacyLevel">Who can view this video<span class="required-mark">*</span></label>
+                    <div class="select-wrap">
+                        <select id="privacyLevel" required onchange="onPublishFormChange()">
+                            <option value="" selected disabled>— Select privacy —</option>
+                        </select>
+                    </div>
+                    <p class="hint" id="privacyHint"></p>
+                </div>
 
+                <div class="field-group">
                 <label class="block-label">Interaction settings</label>
                 <div class="check-row">
                     <label><input type="checkbox" id="allowComment" onchange="onPublishFormChange()"><span>Allow comments</span></label>
                     <label><input type="checkbox" id="allowDuet" onchange="onPublishFormChange()"><span>Allow duet</span></label>
                     <label><input type="checkbox" id="allowStitch" onchange="onPublishFormChange()"><span>Allow stitch</span></label>
                 </div>
+                </div>
 
+                <div class="field-group">
                 <label class="block-label"><input type="checkbox" id="commercialToggle" onchange="onCommercialToggle()"> Disclose commercial content</label>
                 <div id="commercialOptions" class="nested-options" hidden>
                     <div class="check-row">
@@ -187,6 +202,7 @@
                         <label><input type="checkbox" id="brandContent" onchange="onPublishFormChange()"><span>Branded content</span></label>
                     </div>
                     <p class="hint" id="commercialHint"></p>
+                </div>
                 </div>
 
                 <div class="consent-row">
@@ -398,24 +414,33 @@
         }
 
         function setupPublishForm(creator) {
-            if (!creator) return;
-
-            var displayName = creator.creator_nickname || creator.creator_username || 'your account';
+            creator = creator || {};
+            var displayName = creator.creator_nickname || creator.creator_username || document.getElementById('accountName').textContent || 'your account';
             document.getElementById('postingToName').textContent = displayName;
 
             var privacySelect = document.getElementById('privacyLevel');
-            privacySelect.innerHTML = '<option value="" selected disabled>Select privacy…</option>';
-            (creator.privacy_level_options || []).forEach(function (level) {
+            privacySelect.innerHTML = '<option value="" selected disabled>— Select privacy —</option>';
+
+            var privacyOptions = creator.privacy_level_options;
+            if (typeof privacyOptions === 'string') {
+                try { privacyOptions = JSON.parse(privacyOptions); } catch (e) { privacyOptions = null; }
+            }
+            if (!Array.isArray(privacyOptions) || !privacyOptions.length) {
+                privacyOptions = ['SELF_ONLY', 'MUTUAL_FOLLOW_FRIENDS', 'PUBLIC_TO_EVERYONE'];
+            }
+
+            privacyOptions.forEach(function (level) {
                 var opt = document.createElement('option');
                 opt.value = level;
-                opt.textContent = PRIVACY_LABELS[level] || level;
+                opt.textContent = PRIVACY_LABELS[level] || level.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, function (c) { return c.toUpperCase(); });
                 privacySelect.appendChild(opt);
             });
 
             var maxSec = creator.max_video_post_duration_sec;
-            document.getElementById('privacyHint').textContent = maxSec
-                ? 'Max video length for this account: ' + maxSec + ' seconds.'
-                : '';
+            var hintParts = ['Choose who can see this post on TikTok.'];
+            if (maxSec) hintParts.push('Max video length: ' + maxSec + ' seconds.');
+            if (privacyOptions.indexOf('SELF_ONLY') !== -1) hintParts.push('Sandbox apps: use "Only me".');
+            document.getElementById('privacyHint').textContent = hintParts.join(' ');
 
             setInteractionCheckbox('allowComment', !creator.comment_disabled);
             setInteractionCheckbox('allowDuet', !creator.duet_disabled);
@@ -564,11 +589,59 @@
             return div.innerHTML;
         }
 
-        function onFileSelected(event) {
+        function readVideoDuration(file) {
+            return new Promise(function (resolve) {
+                var video = document.createElement('video');
+                video.preload = 'metadata';
+                var url = URL.createObjectURL(file);
+                var settled = false;
+                function done(duration) {
+                    if (settled) return;
+                    settled = true;
+                    URL.revokeObjectURL(url);
+                    resolve(duration);
+                }
+                video.onloadedmetadata = function () { done(video.duration); };
+                video.onerror = function () { done(null); };
+                setTimeout(function () { done(null); }, 5000);
+                video.src = url;
+            });
+        }
+
+        function finalizeFileSelection(file, duration) {
+            window.selectedVideoFile = file;
+            window.selectedVideoDuration = duration;
+
+            var maxSec = window.creatorInfo && window.creatorInfo.max_video_post_duration_sec;
+            if (duration && maxSec && duration > maxSec) {
+                showStatus('Video is ' + Math.round(duration) + 's — max allowed is ' + maxSec + 's for this account.', 'error');
+                document.getElementById('step2').classList.remove('done');
+                document.getElementById('step2').classList.add('pending');
+                updatePublishButton();
+                return;
+            }
+
+            var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            var durationLabel = duration ? Math.round(duration) + 's' : 'unknown';
+            var fileInfo = document.getElementById('fileInfo');
+            fileInfo.innerHTML =
+                '<strong>Selected:</strong> ' + escapeHtml(file.name) + '<br>' +
+                '<strong>Duration:</strong> ' + durationLabel + '<br>' +
+                '<strong>Size:</strong> ' + sizeMB + ' MB<br>' +
+                '<strong>Type:</strong> ' + (file.type || 'video');
+            fileInfo.classList.add('show');
+
+            document.getElementById('step2').classList.add('done');
+            document.getElementById('step2').classList.remove('pending');
+            document.getElementById('publishOptions').hidden = false;
+            updatePublishButton();
+        }
+
+        async function onFileSelected(event) {
             var file = event.target.files[0];
             if (!file) return;
 
-            if (!file.type.startsWith('video/')) {
+            if (!file.type.startsWith('video/') && !/\.(mp4|mov|webm)$/i.test(file.name)) {
                 showStatus('Please select a video file (MP4 recommended).', 'error');
                 return;
             }
@@ -577,7 +650,7 @@
             window.selectedVideoDuration = null;
             document.getElementById('step2').classList.remove('done');
             document.getElementById('step2').classList.add('pending');
-            document.getElementById('publishOptions').hidden = true;
+            document.getElementById('publishOptions').hidden = false;
 
             var preview = document.getElementById('videoPreview');
             if (window.videoPreviewUrl) {
@@ -587,31 +660,13 @@
             preview.src = window.videoPreviewUrl;
             preview.hidden = false;
 
-            preview.onloadedmetadata = function () {
-                var duration = preview.duration;
-                window.selectedVideoDuration = duration;
-                var maxSec = window.creatorInfo && window.creatorInfo.max_video_post_duration_sec;
-                if (maxSec && duration > maxSec) {
-                    showStatus('Video is ' + Math.round(duration) + 's — max allowed is ' + maxSec + 's for this account.', 'error');
-                    updatePublishButton();
-                    return;
-                }
+            if (!window.creatorInfo || !document.getElementById('privacyLevel').options.length || document.getElementById('privacyLevel').options.length === 1) {
+                setupPublishForm(window.creatorInfo);
+            }
 
-                var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-                var fileInfo = document.getElementById('fileInfo');
-                fileInfo.innerHTML =
-                    '<strong>Selected:</strong> ' + escapeHtml(file.name) + '<br>' +
-                    '<strong>Duration:</strong> ' + Math.round(duration) + 's<br>' +
-                    '<strong>Size:</strong> ' + sizeMB + ' MB<br>' +
-                    '<strong>Type:</strong> ' + file.type;
-                fileInfo.classList.add('show');
-
-                window.selectedVideoFile = file;
-                document.getElementById('step2').classList.add('done');
-                document.getElementById('step2').classList.remove('pending');
-                document.getElementById('publishOptions').hidden = false;
-                updatePublishButton();
-            };
+            showStatus('Reading video…', 'info');
+            var duration = await readVideoDuration(file);
+            finalizeFileSelection(file, duration);
         }
 
         function isPublishFormValid() {
@@ -635,7 +690,17 @@
         }
 
         function updatePublishButton() {
-            document.getElementById('publishBtn').disabled = !isPublishFormValid();
+            var btn = document.getElementById('publishBtn');
+            var valid = isPublishFormValid();
+            btn.disabled = !valid;
+            if (!valid && window.selectedVideoFile) {
+                var missing = [];
+                if (!document.getElementById('privacyLevel').value) missing.push('select privacy');
+                if (!document.getElementById('musicConsent').checked) missing.push('accept music consent');
+                btn.title = missing.length ? 'Required: ' + missing.join(', ') : '';
+            } else {
+                btn.title = '';
+            }
         }
 
         async function publishVideo() {
