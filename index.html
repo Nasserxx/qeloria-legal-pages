@@ -85,13 +85,18 @@
         .caption-field label { display: block; font-size: 14px; margin-bottom: 6px; opacity: 0.9; }
         .caption-field input { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; font-size: 14px; }
         .caption-field input::placeholder { color: rgba(255,255,255,0.4); }
-        .privacy-field { margin: 8px 0 16px; font-size: 14px; }
-        .privacy-field select { margin-left: 8px; padding: 6px 10px; border-radius: 6px; border: none; background: rgba(0,0,0,0.4); color: #fff; }
-        .api-banner { margin: 12px 0 4px; padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; display: none; }
-        .api-banner.show { display: block; }
-        .api-banner.ok { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); }
-        .api-banner.warn { background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4); }
-        .api-banner.err { background: rgba(254,44,85,0.15); border: 1px solid rgba(254,44,85,0.4); }
+        .publish-options { margin-top: 16px; padding: 16px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+        .publish-options label.block-label { display: block; font-size: 14px; margin-bottom: 8px; opacity: 0.95; }
+        .publish-options select, .publish-options input[type="text"] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.35); color: #fff; font-size: 14px; }
+        .publish-options .check-row { display: flex; flex-wrap: wrap; gap: 12px 20px; margin: 10px 0; font-size: 14px; }
+        .publish-options .check-row label { display: flex; align-items: center; gap: 8px; cursor: pointer; opacity: 0.95; }
+        .publish-options .check-row input:disabled + span { opacity: 0.45; cursor: not-allowed; }
+        .publish-options .nested-options { margin: 8px 0 8px 20px; padding-left: 12px; border-left: 2px solid rgba(0,242,234,0.3); }
+        .publish-options .consent-row { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; line-height: 1.5; }
+        .publish-options .hint { font-size: 12px; opacity: 0.75; margin-top: 6px; }
+        .video-preview { width: 100%; max-width: 280px; margin: 12px auto; display: block; border-radius: 10px; background: #111; aspect-ratio: 9/16; object-fit: contain; }
+        .posting-to { text-align: center; font-size: 14px; margin-bottom: 12px; opacity: 0.9; }
+        .posting-to strong { color: #00f2ea; }
     </style>
 </head>
 <body>
@@ -106,7 +111,6 @@
         <div class="section demo-section">
             <h2>🎬 Live Demo — TikTok Content Posting API</h2>
             <p>This is the actual end-to-end integration with TikTok's Content Posting API. Connect your TikTok account, view your profile and videos, then publish new educational content.</p>
-            <div id="apiBanner" class="api-banner" role="status"></div>
 
             <div class="step" id="step1">
                 <div class="step-num">1</div>
@@ -154,17 +158,40 @@
                 <div class="file-info" id="fileInfo"></div>
             </div>
 
-            <div class="caption-field">
-                <label for="videoCaption">Caption / title</label>
-                <input type="text" id="videoCaption" placeholder="English learning tip #qeloria #learnenglish" maxlength="2200">
-            </div>
-            <div class="privacy-field">
-                <label for="privacyLevel">Privacy:</label>
-                <select id="privacyLevel">
-                    <option value="SELF_ONLY">Only me (recommended for sandbox testing)</option>
-                    <option value="MUTUAL_FOLLOW_FRIENDS">Friends</option>
-                    <option value="PUBLIC_TO_EVERYONE">Public</option>
+            <div id="publishOptions" class="publish-options" hidden>
+                <p class="posting-to">Posting to <strong id="postingToName">—</strong></p>
+                <video id="videoPreview" class="video-preview" controls hidden></video>
+
+                <div class="caption-field">
+                    <label class="block-label" for="videoCaption">Caption / title</label>
+                    <input type="text" id="videoCaption" placeholder="English learning tip #qeloria #learnenglish" maxlength="2200">
+                </div>
+
+                <label class="block-label" for="privacyLevel">Who can view this video *</label>
+                <select id="privacyLevel" onchange="onPublishFormChange()">
+                    <option value="" selected disabled>Select privacy…</option>
                 </select>
+                <p class="hint" id="privacyHint"></p>
+
+                <label class="block-label">Interaction settings</label>
+                <div class="check-row">
+                    <label><input type="checkbox" id="allowComment" onchange="onPublishFormChange()"><span>Allow comments</span></label>
+                    <label><input type="checkbox" id="allowDuet" onchange="onPublishFormChange()"><span>Allow duet</span></label>
+                    <label><input type="checkbox" id="allowStitch" onchange="onPublishFormChange()"><span>Allow stitch</span></label>
+                </div>
+
+                <label class="block-label"><input type="checkbox" id="commercialToggle" onchange="onCommercialToggle()"> Disclose commercial content</label>
+                <div id="commercialOptions" class="nested-options" hidden>
+                    <div class="check-row">
+                        <label><input type="checkbox" id="brandOrganic" onchange="onPublishFormChange()"><span>Your brand</span></label>
+                        <label><input type="checkbox" id="brandContent" onchange="onPublishFormChange()"><span>Branded content</span></label>
+                    </div>
+                    <p class="hint" id="commercialHint"></p>
+                </div>
+
+                <div class="consent-row">
+                    <label><input type="checkbox" id="musicConsent" onchange="onPublishFormChange()"><span id="consentText">By posting, you agree to TikTok's Music Usage Confirmation</span></label>
+                </div>
             </div>
 
             <div class="step pending" id="step3">
@@ -262,9 +289,17 @@
     <script src="tiktok-oauth.js"></script>
     <script src="tiktok-api.js"></script>
     <script>
-        window.addEventListener('load', function () {
-            checkApiProxy();
+        var PRIVACY_LABELS = {
+            PUBLIC_TO_EVERYONE: 'Everyone',
+            MUTUAL_FOLLOW_FRIENDS: 'Friends',
+            FOLLOWER_OF_CREATOR: 'Followers',
+            SELF_ONLY: 'Only me'
+        };
 
+        window.creatorInfo = null;
+        window.selectedVideoDuration = null;
+
+        window.addEventListener('load', function () {
             var urlParams = new URLSearchParams(window.location.search);
             var oauthError = urlParams.get('tiktok_error');
             var oauthErrorType = urlParams.get('tiktok_error_type');
@@ -292,43 +327,8 @@
             }
         });
 
-        async function checkApiProxy() {
-            var banner = document.getElementById('apiBanner');
-            var proxyUrl = TikTokOAuth.getApiBaseUrl() || '(same origin — local dev)';
-            banner.className = 'api-banner show warn';
-            banner.textContent = 'Checking TikTok API proxy at ' + proxyUrl + '…';
-
-            try {
-                var health = await TikTokApi.checkHealth();
-                if (health.ok && health.ready) {
-                    banner.className = 'api-banner show ok';
-                    banner.textContent = 'API proxy ready. Site on GitHub Pages; token exchange runs on Vercel.';
-                    return true;
-                }
-                if (health.ok && !health.ready) {
-                    banner.className = 'api-banner show err';
-                    banner.innerHTML = 'API proxy is up but <strong>TIKTOK_CLIENT_SECRET</strong> is missing in Vercel. Add it under Settings → Environment Variables, then redeploy.';
-                    return false;
-                }
-                throw new Error('health check failed');
-            } catch (err) {
-                banner.className = 'api-banner show err';
-                banner.innerHTML =
-                    'TikTok API proxy not reachable. One-time setup: deploy <code>api/</code> to Vercel (see <a href="https://github.com/Nasserxx/qeloria-legal-pages/blob/main/DEMO.md" style="color:#00f2ea">DEMO.md</a>), set <code>apiProxyUrl</code> in <code>tiktok-oauth.js</code>. ' +
-                    'Current: <code>' + escapeHtml(TikTokOAuth.config.apiProxyUrl || 'not set') + '</code>';
-                console.error('[TikTok API] Proxy health check failed:', err);
-                return false;
-            }
-        }
-
-        async function connectTikTok(event) {
+        function connectTikTok(event) {
             event.preventDefault();
-
-            var apiOk = await checkApiProxy();
-            if (!apiOk) {
-                showStatus('Deploy the Vercel API proxy first (see banner above). GitHub Pages cannot exchange OAuth tokens.', 'error');
-                return;
-            }
 
             var redirectUri = TikTokOAuth.getRedirectUri();
             if (!TikTokOAuth.isRegisteredRedirectUri(redirectUri)) {
@@ -385,7 +385,9 @@
             showStatus('Loading your TikTok profile and videos…', 'info');
             try {
                 var profile = await TikTokApi.fetchProfile(accessToken);
+                window.creatorInfo = profile.creator || null;
                 renderAccount(profile);
+                setupPublishForm(window.creatorInfo);
                 var videosData = await TikTokApi.fetchVideos(accessToken, 12);
                 renderVideoGrid(videosData.videos || []);
                 showStatus('Profile and videos loaded.', 'success');
@@ -393,6 +395,100 @@
                 showStatus('Could not load profile: ' + err.message, 'error');
                 console.error('[TikTok API] Profile/videos error:', err);
             }
+        }
+
+        function setupPublishForm(creator) {
+            if (!creator) return;
+
+            var displayName = creator.creator_nickname || creator.creator_username || 'your account';
+            document.getElementById('postingToName').textContent = displayName;
+
+            var privacySelect = document.getElementById('privacyLevel');
+            privacySelect.innerHTML = '<option value="" selected disabled>Select privacy…</option>';
+            (creator.privacy_level_options || []).forEach(function (level) {
+                var opt = document.createElement('option');
+                opt.value = level;
+                opt.textContent = PRIVACY_LABELS[level] || level;
+                privacySelect.appendChild(opt);
+            });
+
+            var maxSec = creator.max_video_post_duration_sec;
+            document.getElementById('privacyHint').textContent = maxSec
+                ? 'Max video length for this account: ' + maxSec + ' seconds.'
+                : '';
+
+            setInteractionCheckbox('allowComment', !creator.comment_disabled);
+            setInteractionCheckbox('allowDuet', !creator.duet_disabled);
+            setInteractionCheckbox('allowStitch', !creator.stitch_disabled);
+
+            document.getElementById('commercialToggle').checked = false;
+            document.getElementById('brandOrganic').checked = false;
+            document.getElementById('brandContent').checked = false;
+            document.getElementById('musicConsent').checked = false;
+            document.getElementById('commercialOptions').hidden = true;
+            updateConsentText();
+            updatePrivacyForCommercial();
+            onPublishFormChange();
+        }
+
+        function setInteractionCheckbox(id, enabled) {
+            var el = document.getElementById(id);
+            el.checked = false;
+            el.disabled = !enabled;
+        }
+
+        function onCommercialToggle() {
+            var on = document.getElementById('commercialToggle').checked;
+            document.getElementById('commercialOptions').hidden = !on;
+            if (!on) {
+                document.getElementById('brandOrganic').checked = false;
+                document.getElementById('brandContent').checked = false;
+            }
+            updateConsentText();
+            updatePrivacyForCommercial();
+            onPublishFormChange();
+        }
+
+        function updatePrivacyForCommercial() {
+            var commercialOn = document.getElementById('commercialToggle').checked;
+            var branded = document.getElementById('brandContent').checked;
+            var privacySelect = document.getElementById('privacyLevel');
+            var hint = document.getElementById('commercialHint');
+
+            Array.from(privacySelect.options).forEach(function (opt) {
+                if (!opt.value) return;
+                if (commercialOn && branded && opt.value === 'SELF_ONLY') {
+                    opt.disabled = true;
+                    if (privacySelect.value === 'SELF_ONLY') privacySelect.value = '';
+                } else {
+                    opt.disabled = false;
+                }
+            });
+
+            if (commercialOn && branded) {
+                hint.textContent = 'Branded content cannot be private. "Only me" is disabled.';
+            } else if (commercialOn) {
+                hint.textContent = 'Select at least one: Your brand or Branded content.';
+            } else {
+                hint.textContent = '';
+            }
+        }
+
+        function updateConsentText() {
+            var commercialOn = document.getElementById('commercialToggle').checked;
+            var branded = document.getElementById('brandContent').checked;
+            var el = document.getElementById('consentText');
+            if (commercialOn && branded) {
+                el.textContent = "By posting, you agree to TikTok's Branded Content Policy and Music Usage Confirmation";
+            } else {
+                el.textContent = "By posting, you agree to TikTok's Music Usage Confirmation";
+            }
+        }
+
+        function onPublishFormChange() {
+            updateConsentText();
+            updatePrivacyForCommercial();
+            updatePublishButton();
         }
 
         function renderAccount(profile) {
@@ -404,6 +500,7 @@
 
             document.getElementById('accountName').textContent = displayName;
             document.getElementById('accountUsername').textContent = username ? '@' + username : '';
+            document.getElementById('postingToName').textContent = displayName;
 
             var stats = document.getElementById('accountStats');
             stats.innerHTML = '';
@@ -476,25 +573,69 @@
                 return;
             }
 
-            var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-            var fileInfo = document.getElementById('fileInfo');
-            fileInfo.innerHTML =
-                '<strong>Selected:</strong> ' + escapeHtml(file.name) + '<br>' +
-                '<strong>Size:</strong> ' + sizeMB + ' MB<br>' +
-                '<strong>Type:</strong> ' + file.type;
-            fileInfo.classList.add('show');
+            window.selectedVideoFile = null;
+            window.selectedVideoDuration = null;
+            document.getElementById('step2').classList.remove('done');
+            document.getElementById('step2').classList.add('pending');
+            document.getElementById('publishOptions').hidden = true;
 
-            document.getElementById('step2').classList.add('done');
-            document.getElementById('step2').classList.remove('pending');
-            window.selectedVideoFile = file;
-            updatePublishButton();
+            var preview = document.getElementById('videoPreview');
+            if (window.videoPreviewUrl) {
+                URL.revokeObjectURL(window.videoPreviewUrl);
+            }
+            window.videoPreviewUrl = URL.createObjectURL(file);
+            preview.src = window.videoPreviewUrl;
+            preview.hidden = false;
+
+            preview.onloadedmetadata = function () {
+                var duration = preview.duration;
+                window.selectedVideoDuration = duration;
+                var maxSec = window.creatorInfo && window.creatorInfo.max_video_post_duration_sec;
+                if (maxSec && duration > maxSec) {
+                    showStatus('Video is ' + Math.round(duration) + 's — max allowed is ' + maxSec + 's for this account.', 'error');
+                    updatePublishButton();
+                    return;
+                }
+
+                var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                var fileInfo = document.getElementById('fileInfo');
+                fileInfo.innerHTML =
+                    '<strong>Selected:</strong> ' + escapeHtml(file.name) + '<br>' +
+                    '<strong>Duration:</strong> ' + Math.round(duration) + 's<br>' +
+                    '<strong>Size:</strong> ' + sizeMB + ' MB<br>' +
+                    '<strong>Type:</strong> ' + file.type;
+                fileInfo.classList.add('show');
+
+                window.selectedVideoFile = file;
+                document.getElementById('step2').classList.add('done');
+                document.getElementById('step2').classList.remove('pending');
+                document.getElementById('publishOptions').hidden = false;
+                updatePublishButton();
+            };
+        }
+
+        function isPublishFormValid() {
+            if (!document.getElementById('step1').classList.contains('done')) return false;
+            if (!window.selectedVideoFile) return false;
+
+            var privacy = document.getElementById('privacyLevel').value;
+            if (!privacy) return false;
+            if (!document.getElementById('musicConsent').checked) return false;
+
+            var maxSec = window.creatorInfo && window.creatorInfo.max_video_post_duration_sec;
+            if (maxSec && window.selectedVideoDuration > maxSec) return false;
+
+            if (document.getElementById('commercialToggle').checked) {
+                var organic = document.getElementById('brandOrganic').checked;
+                var branded = document.getElementById('brandContent').checked;
+                if (!organic && !branded) return false;
+            }
+
+            return true;
         }
 
         function updatePublishButton() {
-            var btn = document.getElementById('publishBtn');
-            var step1Done = document.getElementById('step1').classList.contains('done');
-            var step2Done = document.getElementById('step2').classList.contains('done');
-            btn.disabled = !(step1Done && step2Done);
+            document.getElementById('publishBtn').disabled = !isPublishFormValid();
         }
 
         async function publishVideo() {
@@ -508,6 +649,10 @@
                 showStatus('Choose a video file first.', 'error');
                 return;
             }
+            if (!isPublishFormValid()) {
+                showStatus('Complete all required publish options (privacy, consent, commercial disclosure if enabled).', 'error');
+                return;
+            }
 
             var btn = document.getElementById('publishBtn');
             btn.disabled = true;
@@ -515,10 +660,15 @@
 
             try {
                 var result = await TikTokApi.publishVideo(session.access_token, file, {
-                    title: document.getElementById('videoCaption').value || 'Published via Qeloria',
+                    title: document.getElementById('videoCaption').value.trim(),
                     privacy_level: document.getElementById('privacyLevel').value,
+                    disable_comment: !document.getElementById('allowComment').checked,
+                    disable_duet: !document.getElementById('allowDuet').checked,
+                    disable_stitch: !document.getElementById('allowStitch').checked,
+                    brand_content_toggle: document.getElementById('brandContent').checked,
+                    brand_organic_toggle: document.getElementById('brandOrganic').checked,
                     onProgress: function (status) {
-                        showStatus('Upload status: ' + (status.status || 'processing') + '…', 'info');
+                        showStatus('Upload status: ' + (status.status || 'processing') + ' — it may take a few minutes to appear on your profile.', 'info');
                     }
                 });
 

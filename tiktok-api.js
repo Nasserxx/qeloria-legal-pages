@@ -32,7 +32,7 @@
             return {};
         });
         if (!response.ok) {
-            const message = data.error_description || data.error?.message || data.error || response.statusText;
+            const message = data.error_description || data.error?.message || data.message || data.error || response.statusText;
             throw new Error(typeof message === 'string' ? message : 'API request failed');
         }
         return data;
@@ -183,7 +183,12 @@
         const init = await initPublish(accessToken, {
             title: options.title,
             video_size: file.size,
-            privacy_level: options.privacy_level || 'SELF_ONLY'
+            privacy_level: options.privacy_level,
+            disable_duet: options.disable_duet,
+            disable_comment: options.disable_comment,
+            disable_stitch: options.disable_stitch,
+            brand_content_toggle: options.brand_content_toggle,
+            brand_organic_toggle: options.brand_organic_toggle
         });
 
         if (!init.upload_url || !init.publish_id) {

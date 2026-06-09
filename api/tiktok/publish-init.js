@@ -28,9 +28,25 @@ module.exports = async function handler(req, res) {
         return res.status(401).json({ error: 'missing_token' });
     }
 
-    const { title, video_size, privacy_level } = req.body || {};
+    const {
+        title,
+        video_size,
+        privacy_level,
+        disable_duet,
+        disable_comment,
+        disable_stitch,
+        brand_content_toggle,
+        brand_organic_toggle
+    } = req.body || {};
+
     if (!video_size || video_size <= 0) {
         return res.status(400).json({ error: 'invalid_video_size' });
+    }
+    if (!privacy_level) {
+        return res.status(400).json({
+            error: 'missing_privacy_level',
+            error_description: 'privacy_level is required and must match creator_info privacy_level_options'
+        });
     }
 
     const source_info = {
@@ -39,13 +55,18 @@ module.exports = async function handler(req, res) {
     };
 
     const post_info = {
-        title: (title || 'Published via Qeloria Content Publisher').slice(0, 2200),
-        privacy_level: privacy_level || 'SELF_ONLY',
-        disable_duet: false,
-        disable_comment: false,
-        disable_stitch: false,
+        privacy_level,
+        disable_duet: disable_duet !== false,
+        disable_comment: disable_comment !== false,
+        disable_stitch: disable_stitch !== false,
+        brand_content_toggle: Boolean(brand_content_toggle),
+        brand_organic_toggle: Boolean(brand_organic_toggle),
         video_cover_timestamp_ms: 1000
     };
+
+    if (title && String(title).trim()) {
+        post_info.title = String(title).trim().slice(0, 2200);
+    }
 
     try {
         const response = await fetch('https://open.tiktokapis.com/v2/post/publish/video/init/', {
