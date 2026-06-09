@@ -7,7 +7,15 @@
         // Sandbox key (Staging app). Production key: aweov6tyahsy44f9 — swap when app is live.
         clientKey: 'sbawoppy1qxvt41y0g',
         authUrl: 'https://www.tiktok.com/v2/auth/authorize/',
-        scopes: 'user.info.basic,video.upload,video.publish,video.list',
+        scopes: 'user.info.basic,user.info.profile,user.info.stats,video.upload,video.publish,video.list',
+        requiredScopes: [
+            'user.info.basic',
+            'user.info.profile',
+            'user.info.stats',
+            'video.upload',
+            'video.publish',
+            'video.list'
+        ],
         stateStorageKey: 'tiktok_oauth_state',
         codeStorageKey: 'tiktok_oauth_code',
         // Must match Login Kit → Redirect URI entries in TikTok Developer Portal exactly.

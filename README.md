@@ -48,7 +48,7 @@ A `client_key` error while the app is in Staging usually means: wrong sandbox/pr
 
 ### 4. Scopes
 
-The demo requests: `user.info.basic`, `video.upload`, `video.publish`, `video.list`. Enable the same scopes on your app (Content Posting API + Login Kit). Unapproved scopes can block authorization.
+The demo requests: `user.info.basic`, `user.info.profile`, `user.info.stats`, `video.upload`, `video.publish`, `video.list`. In [developers.tiktok.com](https://developers.tiktok.com) → your app → **Scopes**, add every scope above (Content Posting API + Login Kit). Users must reconnect after you add scopes so the new token includes them.
 
 ### 5. Authorization URL
 

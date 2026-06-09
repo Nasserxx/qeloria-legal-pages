@@ -128,7 +128,7 @@
                 <div class="step-num">1</div>
                 <div>
                     <strong>Connect to TikTok</strong>
-                    <p style="margin: 4px 0 0; opacity: 0.8; font-size: 14px;">OAuth 2.0 authorization — scopes: <code>user.info.basic</code>, <code>video.upload</code></p>
+                    <p style="margin: 4px 0 0; opacity: 0.8; font-size: 14px;">OAuth 2.0 — scopes: <code>user.info.basic</code>, <code>user.info.profile</code>, <code>user.info.stats</code>, <code>video.upload</code>, <code>video.publish</code>, <code>video.list</code></p>
                 </div>
             </div>
 
@@ -137,6 +137,10 @@
                     <svg class="tiktok-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.3a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.73z"/></svg>
                     Connect with TikTok
                 </a>
+                <p id="disconnectWrap" hidden style="margin-top:10px;font-size:13px;">
+                    <a href="#" onclick="disconnectTikTok(event)" style="color:#00f2ea;">Disconnect &amp; reconnect</a>
+                    <span style="opacity:0.7;"> — use after changing scopes or account privacy</span>
+                </p>
             </div>
 
             <div id="accountPanel" class="account-panel">
@@ -320,6 +324,39 @@
         window.creatorInfo = null;
         window.selectedVideoDuration = null;
         window.sandboxPublishBlocked = false;
+        window.scopePublishBlocked = false;
+        window.publishBlockedReason = '';
+
+        function getGrantedScopes() {
+            var session = TikTokApi.getSession();
+            if (!session || !session.scope) return [];
+            return session.scope.split(/[,\s]+/).map(function (s) { return s.trim(); }).filter(Boolean);
+        }
+
+        function getMissingScopes() {
+            var required = TikTokOAuth.config.requiredScopes || [];
+            var granted = getGrantedScopes();
+            return required.filter(function (scope) { return granted.indexOf(scope) === -1; });
+        }
+
+        function updatePublishBlockers() {
+            var missing = getMissingScopes();
+            if (missing.length) {
+                window.scopePublishBlocked = true;
+                window.publishBlockedReason =
+                    'Missing TikTok permissions: ' + missing.join(', ') +
+                    '. Click Disconnect & reconnect and approve every permission on the consent screen.';
+                return;
+            }
+            if (!window.creatorInfo) {
+                window.scopePublishBlocked = true;
+                window.publishBlockedReason =
+                    'Creator settings could not be loaded (needs video.publish). Disconnect & reconnect with all permissions.';
+                return;
+            }
+            window.scopePublishBlocked = false;
+            window.publishBlockedReason = '';
+        }
 
         function normalizePrivacyOptions(creator) {
             var opts = creator && creator.privacy_level_options;
@@ -362,6 +399,9 @@
         function formatPublishError(err) {
             var msg = err && err.message ? err.message : String(err);
             var code = err && err.code ? err.code : '';
+            if (msg.indexOf('did not authorize the scope') !== -1 || code === 'scope_not_authorized') {
+                return 'Missing TikTok permission. Click Disconnect & reconnect and approve every scope on the consent screen.';
+            }
             if (code === 'unaudited_client_can_only_post_to_private_accounts' || msg.indexOf('integration guidelines') !== -1) {
                 return 'TikTok blocked publish: your account must be Private (TikTok app settings) and privacy must be "Only me". Switch account to private, reconnect, then try again.';
             }
@@ -399,8 +439,17 @@
             }
         });
 
+        function disconnectTikTok(event) {
+            if (event) event.preventDefault();
+            TikTokApi.clearSession();
+            TikTokOAuth.clearAuthCode();
+            TikTokOAuth.clearState();
+            window.location.href = TikTokOAuth.getHomeUrl();
+        }
+
         function connectTikTok(event) {
             event.preventDefault();
+            TikTokApi.clearSession();
 
             var redirectUri = TikTokOAuth.getRedirectUri();
             if (!TikTokOAuth.isRegisteredRedirectUri(redirectUri)) {
@@ -422,7 +471,10 @@
                 var session = await TikTokApi.exchangeCode(code, TikTokOAuth.getRedirectUri());
                 markConnectedUi();
                 await loadAccountAndVideos(session.access_token);
-                showStatus('Connected to TikTok. Tokens logged to browser console (F12).', 'success');
+                var missing = getMissingScopes();
+                if (missing.length) {
+                    console.warn('[TikTok OAuth] Missing scopes after auth:', missing);
+                }
                 window.history.replaceState({}, document.title, window.location.pathname);
             } catch (err) {
                 showStatus('Token exchange failed: ' + err.message, 'error');
@@ -437,6 +489,8 @@
             btn.classList.add('connected');
             btn.innerHTML = '<svg class="tiktok-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Connected to TikTok';
             document.getElementById('accountPanel').classList.add('show');
+            document.getElementById('disconnectWrap').hidden = false;
+            updatePublishBlockers();
             updatePublishButton();
         }
 
@@ -459,14 +513,60 @@
                 var profile = await TikTokApi.fetchProfile(accessToken);
                 window.creatorInfo = profile.creator || null;
                 renderAccount(profile);
-                setupPublishForm(window.creatorInfo);
-                var videosData = await TikTokApi.fetchVideos(accessToken, 12);
-                renderVideoGrid(videosData.videos || []);
-                showStatus('Profile and videos loaded.', 'success');
+
+                if (window.creatorInfo) {
+                    setupPublishForm(window.creatorInfo);
+                } else {
+                    setupPublishFormFallback(profile.creator_error);
+                }
+
+                updatePublishBlockers();
+
+                try {
+                    var videosData = await TikTokApi.fetchVideos(accessToken, 12);
+                    renderVideoGrid(videosData.videos || []);
+                } catch (videoErr) {
+                    console.warn('[TikTok API] Video list error:', videoErr);
+                    renderVideoGrid([]);
+                    document.getElementById('libraryEmpty').hidden = false;
+                    document.getElementById('libraryEmpty').textContent =
+                        'Could not load videos. Reconnect and grant video.list permission.';
+                }
+
+                if (window.scopePublishBlocked) {
+                    showStatus(window.publishBlockedReason, 'error');
+                } else if (window.sandboxPublishBlocked) {
+                    showStatus('Connected. Set your TikTok account to Private before publishing.', 'info');
+                } else {
+                    showStatus('Profile and videos loaded.', 'success');
+                }
             } catch (err) {
                 showStatus('Could not load profile: ' + err.message, 'error');
                 console.error('[TikTok API] Profile/videos error:', err);
             }
+        }
+
+        function setupPublishFormFallback(creatorError) {
+            var displayName = document.getElementById('accountName').textContent || 'your account';
+            document.getElementById('postingToName').textContent = displayName;
+
+            var privacySelect = document.getElementById('privacyLevel');
+            privacySelect.innerHTML = '<option value="" selected disabled>— Reconnect required —</option>';
+
+            var el = document.getElementById('sandboxWarning');
+            window.sandboxPublishBlocked = true;
+            el.hidden = false;
+            el.className = 'sandbox-warning err';
+            var detail = creatorError && creatorError.message ? creatorError.message + '<br>' : '';
+            el.innerHTML =
+                '<strong>Reconnect required</strong><br>' +
+                detail +
+                'Disconnect, connect again, and approve <strong>all</strong> permissions on TikTok\'s consent screen ' +
+                '(especially <code>video.publish</code> and <code>video.list</code>).';
+
+            document.getElementById('privacyHint').textContent =
+                'Creator settings are required before publishing.';
+            onPublishFormChange();
         }
 
         function setupPublishForm(creator) {
@@ -722,7 +822,9 @@
         function isPublishFormValid() {
             if (!document.getElementById('step1').classList.contains('done')) return false;
             if (!window.selectedVideoFile) return false;
+            if (window.scopePublishBlocked) return false;
             if (window.sandboxPublishBlocked) return false;
+            if (!window.creatorInfo) return false;
 
             var privacy = document.getElementById('privacyLevel').value;
             if (!privacy) return false;
@@ -747,6 +849,11 @@
             btn.disabled = !valid;
             if (!valid && window.selectedVideoFile) {
                 var missing = [];
+                if (window.scopePublishBlocked && window.publishBlockedReason) {
+                    btn.title = window.publishBlockedReason;
+                    return;
+                }
+                if (!window.creatorInfo) missing.push('reconnect with all TikTok permissions');
                 if (window.sandboxPublishBlocked) missing.push('set TikTok account to Private');
                 if (!document.getElementById('privacyLevel').value) missing.push('select privacy "Only me"');
                 else if (document.getElementById('privacyLevel').value !== 'SELF_ONLY') missing.push('privacy must be "Only me"');
