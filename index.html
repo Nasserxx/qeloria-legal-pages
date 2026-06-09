@@ -62,6 +62,36 @@
         .step-num { width: 32px; height: 32px; background: #00f2ea; color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
         .step.done .step-num { background: #10b981; color: #fff; }
         .step.pending .step-num { background: rgba(255,255,255,0.2); color: #fff; }
+
+        /* Connected account + video library */
+        .account-panel { display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.15); }
+        .account-panel.show { display: block; }
+        .account-header { display: flex; align-items: center; gap: 16px; padding: 20px; background: rgba(0,0,0,0.25); border-radius: 12px; margin-bottom: 20px; }
+        .account-avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #00f2ea; flex-shrink: 0; }
+        .account-meta h3 { font-size: 20px; margin: 0 0 4px; }
+        .account-meta .username { color: #00f2ea; font-size: 15px; margin-bottom: 6px; }
+        .account-stats { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; opacity: 0.85; }
+        .account-stats span { background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 20px; }
+        .library-title { font-size: 18px; margin: 0 0 12px; display: flex; align-items: center; justify-content: space-between; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+        .video-card { background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s; }
+        .video-card:hover { transform: translateY(-2px); border-color: rgba(0,242,234,0.4); }
+        .video-card img { width: 100%; aspect-ratio: 9/16; object-fit: cover; display: block; background: #111; }
+        .video-card .video-card-body { padding: 10px; }
+        .video-card .video-title { font-size: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.8em; }
+        .video-card .video-meta { font-size: 11px; opacity: 0.7; margin-top: 6px; }
+        .library-empty { text-align: center; padding: 24px; opacity: 0.7; font-size: 14px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+        .caption-field { width: 100%; margin: 12px 0; }
+        .caption-field label { display: block; font-size: 14px; margin-bottom: 6px; opacity: 0.9; }
+        .caption-field input { width: 100%; padding: 12px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.3); color: #fff; font-size: 14px; }
+        .caption-field input::placeholder { color: rgba(255,255,255,0.4); }
+        .privacy-field { margin: 8px 0 16px; font-size: 14px; }
+        .privacy-field select { margin-left: 8px; padding: 6px 10px; border-radius: 6px; border: none; background: rgba(0,0,0,0.4); color: #fff; }
+        .api-banner { margin: 12px 0 4px; padding: 12px 14px; border-radius: 8px; font-size: 13px; line-height: 1.5; display: none; }
+        .api-banner.show { display: block; }
+        .api-banner.ok { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); }
+        .api-banner.warn { background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.4); }
+        .api-banner.err { background: rgba(254,44,85,0.15); border: 1px solid rgba(254,44,85,0.4); }
     </style>
 </head>
 <body>
@@ -75,7 +105,8 @@
     <div class="container">
         <div class="section demo-section">
             <h2>🎬 Live Demo — TikTok Content Posting API</h2>
-            <p>This is the actual end-to-end integration with TikTok's Content Posting API. The same flow is used in production to publish educational videos to the @qeloriaenglish TikTok account.</p>
+            <p>This is the actual end-to-end integration with TikTok's Content Posting API. Connect your TikTok account, view your profile and videos, then publish new educational content.</p>
+            <div id="apiBanner" class="api-banner" role="status"></div>
 
             <div class="step" id="step1">
                 <div class="step-num">1</div>
@@ -92,6 +123,23 @@
                 </a>
             </div>
 
+            <div id="accountPanel" class="account-panel">
+                <div class="account-header">
+                    <img id="accountAvatar" class="account-avatar" src="" alt="" hidden>
+                    <div class="account-meta">
+                        <h3 id="accountName">—</h3>
+                        <div class="username" id="accountUsername">—</div>
+                        <div class="account-stats" id="accountStats"></div>
+                    </div>
+                </div>
+                <div class="library-title">
+                    <span>Your TikTok videos</span>
+                    <span id="videoCountLabel" style="font-size:13px;opacity:0.7;"></span>
+                </div>
+                <div id="videoGrid" class="video-grid"></div>
+                <div id="libraryEmpty" class="library-empty" hidden>No public videos found yet.</div>
+            </div>
+
             <div class="step pending" id="step2">
                 <div class="step-num">2</div>
                 <div>
@@ -104,6 +152,19 @@
                 <label for="videoFile">📁 Choose Video File</label>
                 <input type="file" id="videoFile" accept="video/mp4,video/*" onchange="onFileSelected(event)">
                 <div class="file-info" id="fileInfo"></div>
+            </div>
+
+            <div class="caption-field">
+                <label for="videoCaption">Caption / title</label>
+                <input type="text" id="videoCaption" placeholder="English learning tip #qeloria #learnenglish" maxlength="2200">
+            </div>
+            <div class="privacy-field">
+                <label for="privacyLevel">Privacy:</label>
+                <select id="privacyLevel">
+                    <option value="SELF_ONLY">Only me (recommended for sandbox testing)</option>
+                    <option value="MUTUAL_FOLLOW_FRIENDS">Friends</option>
+                    <option value="PUBLIC_TO_EVERYONE">Public</option>
+                </select>
             </div>
 
             <div class="step pending" id="step3">
@@ -199,11 +260,14 @@
     </div>
 
     <script src="tiktok-oauth.js"></script>
+    <script src="tiktok-api.js"></script>
     <script>
         window.addEventListener('load', function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const oauthError = urlParams.get('tiktok_error');
-            const oauthErrorType = urlParams.get('tiktok_error_type');
+            checkApiProxy();
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var oauthError = urlParams.get('tiktok_error');
+            var oauthErrorType = urlParams.get('tiktok_error_type');
 
             if (oauthError) {
                 showStatus(oauthError, 'error');
@@ -214,107 +278,267 @@
                 return;
             }
 
-            const code = TikTokOAuth.readAuthCode();
+            var code = TikTokOAuth.readAuthCode();
             if (code) {
-                onTikTokConnected(code);
                 TikTokOAuth.clearAuthCode();
-            }
-        });
-
-        function connectTikTok(event) {
-            event.preventDefault();
-
-            const redirectUri = TikTokOAuth.getRedirectUri();
-            if (!TikTokOAuth.isRegisteredRedirectUri(redirectUri)) {
-                showStatus(
-                    'This site URL is not configured for TikTok OAuth. Register this redirect URI in TikTok Developer Portal → Login Kit: ' + redirectUri,
-                    'error'
-                );
-                console.error(TikTokOAuth.describeTikTokSetupError('redirect_uri'));
+                completeConnection(code);
                 return;
             }
 
-            const state = TikTokOAuth.generateState();
+            var session = TikTokApi.getSession();
+            if (session && session.access_token) {
+                markConnectedUi();
+                loadAccountAndVideos(session.access_token);
+            }
+        });
+
+        async function checkApiProxy() {
+            var banner = document.getElementById('apiBanner');
+            var proxyUrl = TikTokOAuth.getApiBaseUrl() || '(same origin — local dev)';
+            banner.className = 'api-banner show warn';
+            banner.textContent = 'Checking TikTok API proxy at ' + proxyUrl + '…';
+
+            try {
+                var health = await TikTokApi.checkHealth();
+                if (health.ok && health.ready) {
+                    banner.className = 'api-banner show ok';
+                    banner.textContent = 'API proxy ready. Site on GitHub Pages; token exchange runs on Vercel.';
+                    return true;
+                }
+                if (health.ok && !health.ready) {
+                    banner.className = 'api-banner show err';
+                    banner.innerHTML = 'API proxy is up but <strong>TIKTOK_CLIENT_SECRET</strong> is missing in Vercel. Add it under Settings → Environment Variables, then redeploy.';
+                    return false;
+                }
+                throw new Error('health check failed');
+            } catch (err) {
+                banner.className = 'api-banner show err';
+                banner.innerHTML =
+                    'TikTok API proxy not reachable. One-time setup: deploy <code>api/</code> to Vercel (see <a href="https://github.com/Nasserxx/qeloria-legal-pages/blob/main/DEMO.md" style="color:#00f2ea">DEMO.md</a>), set <code>apiProxyUrl</code> in <code>tiktok-oauth.js</code>. ' +
+                    'Current: <code>' + escapeHtml(TikTokOAuth.config.apiProxyUrl || 'not set') + '</code>';
+                console.error('[TikTok API] Proxy health check failed:', err);
+                return false;
+            }
+        }
+
+        async function connectTikTok(event) {
+            event.preventDefault();
+
+            var apiOk = await checkApiProxy();
+            if (!apiOk) {
+                showStatus('Deploy the Vercel API proxy first (see banner above). GitHub Pages cannot exchange OAuth tokens.', 'error');
+                return;
+            }
+
+            var redirectUri = TikTokOAuth.getRedirectUri();
+            if (!TikTokOAuth.isRegisteredRedirectUri(redirectUri)) {
+                showStatus(
+                    'Register this redirect URI in TikTok Developer Portal → Login Kit: ' + redirectUri,
+                    'error'
+                );
+                return;
+            }
+
+            var state = TikTokOAuth.generateState();
             TikTokOAuth.saveState(state);
             window.location.href = TikTokOAuth.buildAuthUrl(state);
         }
 
-        function onTikTokConnected(code) {
+        async function completeConnection(code) {
+            showStatus('Exchanging authorization code for access tokens…', 'info');
+            try {
+                var session = await TikTokApi.exchangeCode(code, TikTokOAuth.getRedirectUri());
+                markConnectedUi();
+                await loadAccountAndVideos(session.access_token);
+                showStatus('Connected to TikTok. Tokens logged to browser console (F12).', 'success');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch (err) {
+                showStatus('Token exchange failed: ' + err.message, 'error');
+                console.error('[TikTok OAuth] Token exchange error:', err);
+            }
+        }
 
-            // Update UI: Step 1 done
+        function markConnectedUi() {
             document.getElementById('step1').classList.add('done');
             document.getElementById('step1').classList.remove('pending');
-
-            // Update button
-            const btn = document.getElementById('tiktokConnectBtn');
+            var btn = document.getElementById('tiktokConnectBtn');
             btn.classList.add('connected');
             btn.innerHTML = '<svg class="tiktok-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Connected to TikTok';
-
-            // Enable publish button when video selected
+            document.getElementById('accountPanel').classList.add('show');
             updatePublishButton();
+        }
 
-            showStatus('✅ Successfully connected to TikTok via OAuth 2.0. You can now publish videos.', 'success');
+        function formatCount(n) {
+            if (n === undefined || n === null) return '—';
+            if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+            return String(n);
+        }
 
-            // Clean URL (remove code from history)
-            window.history.replaceState({}, document.title, window.location.pathname);
+        function formatDate(ts) {
+            if (!ts) return '';
+            var d = new Date(ts * 1000);
+            return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        async function loadAccountAndVideos(accessToken) {
+            showStatus('Loading your TikTok profile and videos…', 'info');
+            try {
+                var profile = await TikTokApi.fetchProfile(accessToken);
+                renderAccount(profile);
+                var videosData = await TikTokApi.fetchVideos(accessToken, 12);
+                renderVideoGrid(videosData.videos || []);
+                showStatus('Profile and videos loaded.', 'success');
+            } catch (err) {
+                showStatus('Could not load profile: ' + err.message, 'error');
+                console.error('[TikTok API] Profile/videos error:', err);
+            }
+        }
+
+        function renderAccount(profile) {
+            var user = profile.user || {};
+            var creator = profile.creator || {};
+            var displayName = creator.creator_nickname || user.display_name || 'TikTok User';
+            var username = creator.creator_username || user.username || user.open_id || '';
+            var avatar = creator.creator_avatar_url || user.avatar_url || '';
+
+            document.getElementById('accountName').textContent = displayName;
+            document.getElementById('accountUsername').textContent = username ? '@' + username : '';
+
+            var stats = document.getElementById('accountStats');
+            stats.innerHTML = '';
+            if (user.video_count !== undefined) {
+                stats.innerHTML += '<span>' + formatCount(user.video_count) + ' videos</span>';
+            }
+            if (user.follower_count !== undefined) {
+                stats.innerHTML += '<span>' + formatCount(user.follower_count) + ' followers</span>';
+            }
+            if (user.open_id) {
+                stats.innerHTML += '<span>open_id: ' + user.open_id.slice(0, 8) + '…</span>';
+            }
+
+            var avatarEl = document.getElementById('accountAvatar');
+            if (avatar) {
+                avatarEl.src = avatar;
+                avatarEl.alt = displayName;
+                avatarEl.hidden = false;
+            }
+
+            var btn = document.getElementById('tiktokConnectBtn');
+            btn.innerHTML = '<svg class="tiktok-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> @' + (username || displayName);
+        }
+
+        function renderVideoGrid(videos) {
+            var grid = document.getElementById('videoGrid');
+            var empty = document.getElementById('libraryEmpty');
+            var countLabel = document.getElementById('videoCountLabel');
+            grid.innerHTML = '';
+
+            countLabel.textContent = videos.length ? videos.length + ' shown' : '';
+
+            if (!videos.length) {
+                empty.hidden = false;
+                return;
+            }
+            empty.hidden = true;
+
+            videos.forEach(function (video) {
+                var card = document.createElement('div');
+                card.className = 'video-card';
+                var cover = video.cover_image_url
+                    ? '<img src="' + video.cover_image_url + '" alt="" loading="lazy">'
+                    : '<img src="" alt="" style="background:#222">';
+                var title = video.title || 'Untitled video';
+                var meta = [];
+                if (video.create_time) meta.push(formatDate(video.create_time));
+                if (video.view_count !== undefined) meta.push(formatCount(video.view_count) + ' views');
+                card.innerHTML = cover +
+                    '<div class="video-card-body">' +
+                    '<div class="video-title">' + escapeHtml(title) + '</div>' +
+                    '<div class="video-meta">' + escapeHtml(meta.join(' · ')) + '</div>' +
+                    '</div>';
+                grid.appendChild(card);
+            });
+        }
+
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function onFileSelected(event) {
-            const file = event.target.files[0];
+            var file = event.target.files[0];
             if (!file) return;
 
-            // Validate
             if (!file.type.startsWith('video/')) {
-                showStatus('❌ Please select a video file (MP4 recommended).', 'error');
+                showStatus('Please select a video file (MP4 recommended).', 'error');
                 return;
             }
 
-            // Show file info
-            const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
-            const fileInfo = document.getElementById('fileInfo');
-            fileInfo.innerHTML = `
-                <strong>📹 Selected:</strong> ${file.name}<br>
-                <strong>Size:</strong> ${sizeMB} MB<br>
-                <strong>Type:</strong> ${file.type}
-            `;
+            var sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            var fileInfo = document.getElementById('fileInfo');
+            fileInfo.innerHTML =
+                '<strong>Selected:</strong> ' + escapeHtml(file.name) + '<br>' +
+                '<strong>Size:</strong> ' + sizeMB + ' MB<br>' +
+                '<strong>Type:</strong> ' + file.type;
             fileInfo.classList.add('show');
 
-            // Update step 2
             document.getElementById('step2').classList.add('done');
             document.getElementById('step2').classList.remove('pending');
-
-            // Store file reference
             window.selectedVideoFile = file;
-
-            // Enable publish
             updatePublishButton();
         }
 
         function updatePublishButton() {
-            const btn = document.getElementById('publishBtn');
-            const step1Done = document.getElementById('step1').classList.contains('done');
-            const step2Done = document.getElementById('step2').classList.contains('done');
+            var btn = document.getElementById('publishBtn');
+            var step1Done = document.getElementById('step1').classList.contains('done');
+            var step2Done = document.getElementById('step2').classList.contains('done');
             btn.disabled = !(step1Done && step2Done);
         }
 
-        function publishVideo() {
-            // Step 3: Publish
-            const step3 = document.getElementById('step3');
-            step3.classList.add('done');
-            step3.classList.remove('pending');
+        async function publishVideo() {
+            var session = TikTokApi.getSession();
+            if (!session || !session.access_token) {
+                showStatus('Connect to TikTok first.', 'error');
+                return;
+            }
+            var file = window.selectedVideoFile;
+            if (!file) {
+                showStatus('Choose a video file first.', 'error');
+                return;
+            }
 
-            showStatus('📤 Uploading video to TikTok via /v2/post/publish/video/init/ ...', 'info');
+            var btn = document.getElementById('publishBtn');
+            btn.disabled = true;
+            showStatus('Initializing publish via TikTok Content Posting API…', 'info');
 
-            // Note: In production, this would call our backend which calls TikTok API.
-            // For the demo, we show the request that would be made.
-            setTimeout(() => {
-                showStatus('✅ Video successfully published to your TikTok account! Check your @qeloriaenglish profile.', 'success');
-                document.getElementById('publishBtn').disabled = true;
-            }, 2000);
+            try {
+                var result = await TikTokApi.publishVideo(session.access_token, file, {
+                    title: document.getElementById('videoCaption').value || 'Published via Qeloria',
+                    privacy_level: document.getElementById('privacyLevel').value,
+                    onProgress: function (status) {
+                        showStatus('Upload status: ' + (status.status || 'processing') + '…', 'info');
+                    }
+                });
+
+                document.getElementById('step3').classList.add('done');
+                document.getElementById('step3').classList.remove('pending');
+
+                var username = document.getElementById('accountUsername').textContent || 'your TikTok account';
+                showStatus('Video published to ' + username + '! Status: ' + (result.status.status || 'complete'), 'success');
+                console.log('[TikTok Publish] Result:', result);
+
+                await loadAccountAndVideos(session.access_token);
+            } catch (err) {
+                showStatus('Publish failed: ' + err.message, 'error');
+                console.error('[TikTok Publish] Error:', err);
+                btn.disabled = false;
+            }
         }
 
         function showStatus(message, type) {
-            const status = document.getElementById('status');
+            var status = document.getElementById('status');
             status.textContent = message;
             status.className = 'status show ' + type;
         }

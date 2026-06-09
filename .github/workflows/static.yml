@@ -33,11 +33,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Prepare static site (exclude serverless API)
+        run: |
+          mkdir -p _site
+          cp index.html tiktok-callback.html business-info.html privacy-policy.html terms-of-service.html _site/
+          cp tiktok-oauth.js tiktok-api.js _site/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          path: '_site'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

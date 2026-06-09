@@ -14,8 +14,31 @@
         registeredRedirectUris: [
             'https://qeloria.com/tiktok-callback.html',
             'https://nasserxx.github.io/qeloria-legal-pages/tiktok-callback.html'
-        ]
+        ],
+        // GitHub Pages is static-only — deploy the api/ folder to Vercel and paste the URL here.
+        // Example: https://qeloria-legal-pages.vercel.app (no trailing slash)
+        apiProxyUrl: 'https://qeloria-legal-pages.vercel.app'
     };
+
+    function getApiBaseUrl() {
+        if (typeof location === 'undefined') {
+            return TIKTOK_OAUTH.apiProxyUrl || '';
+        }
+        try {
+            var override = new URLSearchParams(location.search).get('api');
+            if (override) {
+                return override.replace(/\/$/, '');
+            }
+        } catch (e) {
+            // ignore
+        }
+        var host = location.hostname;
+        // Local dev: npx vercel dev serves /api on the same origin.
+        if (host === 'localhost' || host === '127.0.0.1') {
+            return '';
+        }
+        return TIKTOK_OAUTH.apiProxyUrl || '';
+    }
 
     function getRedirectUri() {
         return new URL('tiktok-callback.html', global.location.href).href.split('#')[0];
@@ -136,6 +159,7 @@
 
     global.TikTokOAuth = {
         config: TIKTOK_OAUTH,
+        getApiBaseUrl: getApiBaseUrl,
         getRedirectUri: getRedirectUri,
         getHomeUrl: getHomeUrl,
         generateState: generateState,

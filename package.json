@@ -1,0 +1,9 @@
+{
+  "name": "qeloria-legal-pages",
+  "private": true,
+  "description": "Qeloria legal pages on GitHub Pages + TikTok API proxy on Vercel",
+  "scripts": {
+    "dev:api": "vercel dev",
+    "deploy:api": "vercel deploy --prod"
+  }
+}
