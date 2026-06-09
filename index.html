@@ -105,6 +105,10 @@
         .video-preview { width: 100%; max-width: 280px; margin: 12px auto; display: block; border-radius: 10px; background: #111; aspect-ratio: 9/16; object-fit: contain; }
         .posting-to { text-align: center; font-size: 14px; margin-bottom: 12px; opacity: 0.9; }
         .posting-to strong { color: #00f2ea; }
+        .sandbox-warning { margin: 12px 0; padding: 12px 14px; border-radius: 8px; background: rgba(251,191,36,0.15); border: 1px solid rgba(251,191,36,0.45); font-size: 13px; line-height: 1.55; }
+        .sandbox-warning.err { background: rgba(254,44,85,0.15); border-color: rgba(254,44,85,0.45); }
+        .sandbox-warning strong { color: #fbbf24; }
+        .sandbox-warning.err strong { color: #fe2c55; }
     </style>
 </head>
 <body>
@@ -168,6 +172,7 @@
 
             <div id="publishOptions" class="publish-options" hidden>
                 <p class="posting-to">Posting to <strong id="postingToName">—</strong></p>
+                <div id="sandboxWarning" class="sandbox-warning" hidden></div>
                 <video id="videoPreview" class="video-preview" controls hidden></video>
 
                 <div class="caption-field">
@@ -314,6 +319,57 @@
 
         window.creatorInfo = null;
         window.selectedVideoDuration = null;
+        window.sandboxPublishBlocked = false;
+
+        function normalizePrivacyOptions(creator) {
+            var opts = creator && creator.privacy_level_options;
+            if (typeof opts === 'string') {
+                try { opts = JSON.parse(opts); } catch (e) { opts = null; }
+            }
+            if (!Array.isArray(opts) || !opts.length) {
+                return { options: ['SELF_ONLY'], accountIsPublic: false };
+            }
+            var accountIsPublic = opts.indexOf('PUBLIC_TO_EVERYONE') !== -1;
+            // Unaudited/sandbox Direct Post: only SELF_ONLY is allowed
+            var sandboxOptions = opts.filter(function (o) { return o === 'SELF_ONLY'; });
+            return {
+                options: sandboxOptions.length ? sandboxOptions : ['SELF_ONLY'],
+                accountIsPublic: accountIsPublic,
+                allOptions: opts
+            };
+        }
+
+        function updateSandboxWarning(privacyMeta) {
+            var el = document.getElementById('sandboxWarning');
+            if (privacyMeta.accountIsPublic) {
+                window.sandboxPublishBlocked = true;
+                el.hidden = false;
+                el.className = 'sandbox-warning err';
+                el.innerHTML =
+                    '<strong>Account must be private</strong><br>' +
+                    'Your TikTok account is <em>public</em>. Sandbox/unaudited apps cannot post until you switch to a <strong>private account</strong>:<br>' +
+                    'TikTok app → Profile → Menu → Settings and privacy → Privacy → turn on <strong>Private account</strong>, then disconnect and reconnect here.';
+                return;
+            }
+            window.sandboxPublishBlocked = false;
+            el.hidden = false;
+            el.className = 'sandbox-warning';
+            el.innerHTML =
+                '<strong>Sandbox posting rules</strong><br>' +
+                'Use privacy <strong>Only me</strong>. Unaudited apps can only post privately until TikTok approves your app.';
+        }
+
+        function formatPublishError(err) {
+            var msg = err && err.message ? err.message : String(err);
+            var code = err && err.code ? err.code : '';
+            if (code === 'unaudited_client_can_only_post_to_private_accounts' || msg.indexOf('integration guidelines') !== -1) {
+                return 'TikTok blocked publish: your account must be Private (TikTok app settings) and privacy must be "Only me". Switch account to private, reconnect, then try again.';
+            }
+            if (code === 'privacy_level_option_mismatch') {
+                return 'Privacy setting is not allowed for this account. Select "Only me".';
+            }
+            return msg;
+        }
 
         window.addEventListener('load', function () {
             var urlParams = new URLSearchParams(window.location.search);
@@ -418,28 +474,22 @@
             var displayName = creator.creator_nickname || creator.creator_username || document.getElementById('accountName').textContent || 'your account';
             document.getElementById('postingToName').textContent = displayName;
 
+            var privacyMeta = normalizePrivacyOptions(creator);
+            updateSandboxWarning(privacyMeta);
+
             var privacySelect = document.getElementById('privacyLevel');
             privacySelect.innerHTML = '<option value="" selected disabled>— Select privacy —</option>';
 
-            var privacyOptions = creator.privacy_level_options;
-            if (typeof privacyOptions === 'string') {
-                try { privacyOptions = JSON.parse(privacyOptions); } catch (e) { privacyOptions = null; }
-            }
-            if (!Array.isArray(privacyOptions) || !privacyOptions.length) {
-                privacyOptions = ['SELF_ONLY', 'MUTUAL_FOLLOW_FRIENDS', 'PUBLIC_TO_EVERYONE'];
-            }
-
-            privacyOptions.forEach(function (level) {
+            privacyMeta.options.forEach(function (level) {
                 var opt = document.createElement('option');
                 opt.value = level;
-                opt.textContent = PRIVACY_LABELS[level] || level.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+                opt.textContent = PRIVACY_LABELS[level] || level;
                 privacySelect.appendChild(opt);
             });
 
             var maxSec = creator.max_video_post_duration_sec;
-            var hintParts = ['Choose who can see this post on TikTok.'];
+            var hintParts = ['Required for sandbox: select "Only me".'];
             if (maxSec) hintParts.push('Max video length: ' + maxSec + ' seconds.');
-            if (privacyOptions.indexOf('SELF_ONLY') !== -1) hintParts.push('Sandbox apps: use "Only me".');
             document.getElementById('privacyHint').textContent = hintParts.join(' ');
 
             setInteractionCheckbox('allowComment', !creator.comment_disabled);
@@ -672,9 +722,11 @@
         function isPublishFormValid() {
             if (!document.getElementById('step1').classList.contains('done')) return false;
             if (!window.selectedVideoFile) return false;
+            if (window.sandboxPublishBlocked) return false;
 
             var privacy = document.getElementById('privacyLevel').value;
             if (!privacy) return false;
+            if (privacy !== 'SELF_ONLY') return false;
             if (!document.getElementById('musicConsent').checked) return false;
 
             var maxSec = window.creatorInfo && window.creatorInfo.max_video_post_duration_sec;
@@ -695,7 +747,9 @@
             btn.disabled = !valid;
             if (!valid && window.selectedVideoFile) {
                 var missing = [];
-                if (!document.getElementById('privacyLevel').value) missing.push('select privacy');
+                if (window.sandboxPublishBlocked) missing.push('set TikTok account to Private');
+                if (!document.getElementById('privacyLevel').value) missing.push('select privacy "Only me"');
+                else if (document.getElementById('privacyLevel').value !== 'SELF_ONLY') missing.push('privacy must be "Only me"');
                 if (!document.getElementById('musicConsent').checked) missing.push('accept music consent');
                 btn.title = missing.length ? 'Required: ' + missing.join(', ') : '';
             } else {
@@ -746,9 +800,10 @@
 
                 await loadAccountAndVideos(session.access_token);
             } catch (err) {
-                showStatus('Publish failed: ' + err.message, 'error');
+                showStatus('Publish failed: ' + formatPublishError(err), 'error');
                 console.error('[TikTok Publish] Error:', err);
                 btn.disabled = false;
+                updatePublishButton();
             }
         }
 

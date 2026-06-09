@@ -33,7 +33,10 @@
         });
         if (!response.ok) {
             const message = data.error_description || data.error?.message || data.message || data.error || response.statusText;
-            throw new Error(typeof message === 'string' ? message : 'API request failed');
+            const err = new Error(typeof message === 'string' ? message : 'API request failed');
+            err.code = data.error?.code || data.code || (typeof data.error === 'string' ? data.error : '');
+            err.log_id = data.error?.log_id || data.log_id;
+            throw err;
         }
         return data;
     }
