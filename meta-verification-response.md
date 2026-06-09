@@ -166,6 +166,46 @@ This is **optional** for Business Verification. Meta will accept `*.github.io` U
 
 ---
 
+## TikTok Developer Portal — Login Kit (fix `client_key` errors)
+
+If **Connect with TikTok** fails with *"We couldn't log in with TikTok"* and mentions `client_key` or `redirect_uri`, complete this checklist in [developers.tiktok.com](https://developers.tiktok.com/):
+
+### A. Login Kit product
+
+1. **Manage apps** → Qeloria Content Publisher → **Add products** → **Login Kit**.
+2. Under Login Kit → **Web**, register these **Redirect URI** values exactly:
+
+```
+https://qeloria.com/tiktok-callback.html
+https://nasserxx.github.io/qeloria-legal-pages/tiktok-callback.html
+```
+
+3. Confirm `client_key` in the portal matches `tiktok-oauth.js`:
+   - **Sandbox:** `sbawoppy1qxvt41y0g` (current, for testing)
+   - **Production:** `aweov6tyahsy44f9` (use after app goes live)
+
+### B. App mode
+
+- **Staging app:** enable **Sandbox**, add your TikTok account as a **target user**. Login only works for target users until the app is live.
+- **Live app:** submit for App Review with a screen recording of the Connect → authorize → callback flow from `index.html`.
+
+### C. Scopes to enable
+
+`user.info.basic`, `video.upload`, `video.publish`, `video.list` (and comment scopes if you use them in production).
+
+### D. URLs for TikTok App Review form
+
+| Field | Value |
+|-------|-------|
+| Privacy Policy | https://qeloria.com/privacy-policy.html (or GitHub Pages URL) |
+| Terms of Service | https://qeloria.com/terms-of-service.html |
+| Website / demo | https://qeloria.com/ |
+| Redirect URI | https://qeloria.com/tiktok-callback.html |
+
+Docs: [Login Kit for Web](https://developers.tiktok.com/doc/login-kit-web)
+
+---
+
 ## After You Submit
 
 Timeline (typical):

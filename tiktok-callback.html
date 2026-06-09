@@ -29,97 +29,60 @@
             <h1>🎬 TikTok Authorization Callback</h1>
             <div id="status"></div>
             <div id="content"></div>
-            <a href="https://qeloria.com/" class="home-btn">← Back to Qeloria</a>
+            <a href="index.html" id="homeLink" class="home-btn">← Back to Qeloria</a>
         </div>
     </div>
 
+    <script src="tiktok-oauth.js"></script>
     <script>
-        // Parse the OAuth callback parameters
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
         const state = urlParams.get('state');
         const error = urlParams.get('error');
+        const errorType = urlParams.get('error_type');
         const errorDescription = urlParams.get('error_description');
 
         const statusDiv = document.getElementById('status');
         const contentDiv = document.getElementById('content');
+        const homeUrl = TikTokOAuth.getHomeUrl();
+        document.getElementById('homeLink').href = homeUrl;
+
+        function redirectHomeWithError(message, type) {
+            const target = new URL(homeUrl);
+            target.searchParams.set('tiktok_error', message);
+            if (type) {
+                target.searchParams.set('tiktok_error_type', type);
+            }
+            window.location.replace(target.toString());
+        }
 
         if (error) {
-            // Authorization denied or failed
-            statusDiv.innerHTML = '<h2 class="error">❌ Authorization Failed</h2>';
+            statusDiv.innerHTML = '<h2 class="error">Authorization Failed</h2>';
+            const setupHelp = TikTokOAuth.describeTikTokSetupError(errorType || error).replace(/\n/g, '<br>');
             contentDiv.innerHTML = `
                 <p>TikTok returned an error:</p>
-                <div class="code-box"><strong>${error}</strong>${errorDescription ? '<br><br>' + errorDescription : ''}</div>
-                <p>Please try again from <a href="https://qeloria.com/" style="color:#00f2ea;">qeloria.com</a>.</p>
+                <div class="code-box"><strong>${error}</strong>${errorType ? '<br><br>type: ' + errorType : ''}${errorDescription ? '<br><br>' + errorDescription : ''}</div>
+                <div class="step">${setupHelp}</div>
+                <p>Redirect URI used: <code>${TikTokOAuth.getRedirectUri()}</code></p>
+                <p><a href="${homeUrl}" style="color:#00f2ea;">Try again from the home page</a></p>
             `;
+            console.error(TikTokOAuth.describeTikTokSetupError(errorType || error));
         } else if (code) {
-            // Success! Display the code
-            statusDiv.innerHTML = '<h2 class="success">✅ Authorization Successful</h2>';
-            contentDiv.innerHTML = `
-                <p>Your TikTok account has been authorized. Copy the <strong>authorization code</strong> below and send it to the Qeloria Publisher backend to complete the connection.</p>
-
-                <div class="step">
-                    <span class="step-num">1</span>
-                    <strong>Click the copy button</strong> to copy the code.
-                </div>
-
-                <div class="code-box" id="codeBox" title="Click to copy">${code}</div>
-
-                <button class="copy-btn" id="copyBtn" onclick="copyCode()">📋 Copy Authorization Code</button>
-                <button class="copy-btn" id="copyUrlBtn" onclick="copyUrl()">🔗 Copy Full Callback URL</button>
-
-                <div class="step">
-                    <span class="step-num">2</span>
-                    Send the code to the Qeloria backend. The backend exchanges this code for a long-lived access token via TikTok's <code>POST /v2/oauth/token/</code> endpoint.
-                </div>
-
-                <p style="margin-top: 24px; opacity: 0.7; font-size: 14px;">
-                    <strong>State (CSRF token):</strong> <code>${state || '(none)'}</code>
-                </p>
-            `;
-
-            // Auto-copy to clipboard
-            navigator.clipboard.writeText(code).then(() => {
-                document.getElementById('copyBtn').textContent = '✅ Copied!';
-                document.getElementById('copyBtn').classList.add('copied');
-            }).catch(() => {
-                // Fallback: select text in code box
-                const range = document.createRange();
-                range.selectNode(document.getElementById('codeBox'));
-                window.getSelection().removeAllRanges();
-                window.getSelection().addRange(range);
-            });
+            if (!TikTokOAuth.verifyState(state)) {
+                redirectHomeWithError('State mismatch — possible CSRF attack. Please connect again.', 'state');
+            } else {
+                TikTokOAuth.saveAuthCode(code);
+                statusDiv.innerHTML = '<h2 class="success">Authorization Successful</h2>';
+                contentDiv.innerHTML = '<p>Returning to Qeloria…</p>';
+                window.location.replace(homeUrl);
+            }
         } else {
-            // No code, no error — user navigated here directly
-            statusDiv.innerHTML = '<h2>ℹ️ No Authorization Data</h2>';
+            statusDiv.innerHTML = '<h2>No Authorization Data</h2>';
             contentDiv.innerHTML = `
-                <p>This page is the OAuth callback for Qeloria's TikTok integration. You should only see this page after authorizing the app on TikTok.</p>
-                <p>To start the authorization flow, visit <a href="https://qeloria.com/" style="color:#00f2ea;">qeloria.com</a> and click <strong>"Connect with TikTok"</strong>.</p>
+                <p>This page is the OAuth callback for Qeloria's TikTok integration. You should only see content here after authorizing the app on TikTok.</p>
+                <p>To start, visit <a href="${homeUrl}" style="color:#00f2ea;">the home page</a> and click <strong>Connect with TikTok</strong>.</p>
+                <p style="margin-top: 16px; opacity: 0.8; font-size: 14px;">Expected callback URL for this deployment: <code>${TikTokOAuth.getRedirectUri()}</code></p>
             `;
-        }
-
-        function copyCode() {
-            navigator.clipboard.writeText(code).then(() => {
-                const btn = document.getElementById('copyBtn');
-                btn.textContent = '✅ Copied!';
-                btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = '📋 Copy Authorization Code';
-                    btn.classList.remove('copied');
-                }, 3000);
-            });
-        }
-
-        function copyUrl() {
-            navigator.clipboard.writeText(window.location.href).then(() => {
-                const btn = document.getElementById('copyUrlBtn');
-                btn.textContent = '✅ URL Copied!';
-                btn.classList.add('copied');
-                setTimeout(() => {
-                    btn.textContent = '🔗 Copy Full Callback URL';
-                    btn.classList.remove('copied');
-                }, 3000);
-            });
         }
     </script>
 </body>

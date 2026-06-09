@@ -198,65 +198,48 @@
         <p>© 2025–2026 Qeloria Content Publisher. All rights reserved.</p>
     </div>
 
+    <script src="tiktok-oauth.js"></script>
     <script>
-        // TikTok OAuth Configuration
-        const TIKTOK_CONFIG = {
-            clientKey: 'aweov6tyahsy44f9',
-            redirectUri: 'https://qeloria.com/tiktok-callback.html',
-            scopes: 'user.info.basic,video.upload,video.publish,video.list',
-            // Production endpoint - TikTok will handle the rest
-            authUrl: 'https://www.tiktok.com/v2/auth/authorize/'
-        };
-
-        // Check for OAuth callback (when redirected back from TikTok)
-        window.addEventListener('load', () => {
+        window.addEventListener('load', function () {
             const urlParams = new URLSearchParams(window.location.search);
-            const code = urlParams.get('code');
-            const error = urlParams.get('error');
+            const oauthError = urlParams.get('tiktok_error');
+            const oauthErrorType = urlParams.get('tiktok_error_type');
 
-            if (error) {
-                showStatus('Authorization denied: ' + error, 'error');
+            if (oauthError) {
+                showStatus(oauthError, 'error');
+                if (oauthErrorType) {
+                    console.error(TikTokOAuth.describeTikTokSetupError(oauthErrorType));
+                }
+                window.history.replaceState({}, document.title, window.location.pathname);
                 return;
             }
 
+            const code = TikTokOAuth.readAuthCode();
             if (code) {
-                // OAuth success
                 onTikTokConnected(code);
+                TikTokOAuth.clearAuthCode();
             }
         });
 
         function connectTikTok(event) {
             event.preventDefault();
 
-            // Generate CSRF state token
-            const state = crypto.randomUUID ? crypto.randomUUID() :
-                ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-                    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4)).toString(16));
+            const redirectUri = TikTokOAuth.getRedirectUri();
+            if (!TikTokOAuth.isRegisteredRedirectUri(redirectUri)) {
+                showStatus(
+                    'This site URL is not configured for TikTok OAuth. Register this redirect URI in TikTok Developer Portal → Login Kit: ' + redirectUri,
+                    'error'
+                );
+                console.error(TikTokOAuth.describeTikTokSetupError('redirect_uri'));
+                return;
+            }
 
-            // Store state for verification on callback
-            sessionStorage.setItem('tiktok_oauth_state', state);
-
-            // Build TikTok OAuth URL
-            const authUrl = `${TIKTOK_CONFIG.authUrl}?client_key=${TIKTOK_CONFIG.clientKey}` +
-                `&scope=${encodeURIComponent(TIKTOK_CONFIG.scopes)}` +
-                `&response_type=code` +
-                `&redirect_uri=${encodeURIComponent(TIKTOK_CONFIG.redirectUri)}` +
-                `&state=${state}`;
-
-            // Open TikTok OAuth in same window (per TikTok requirements)
-            window.location.href = authUrl;
+            const state = TikTokOAuth.generateState();
+            TikTokOAuth.saveState(state);
+            window.location.href = TikTokOAuth.buildAuthUrl(state);
         }
 
         function onTikTokConnected(code) {
-            // Verify state
-            const storedState = sessionStorage.getItem('tiktok_oauth_state');
-            const urlParams = new URLSearchParams(window.location.search);
-            const returnedState = urlParams.get('state');
-
-            if (storedState && returnedState !== storedState) {
-                showStatus('⚠️ State mismatch — possible CSRF attack. Please try again.', 'error');
-                return;
-            }
 
             // Update UI: Step 1 done
             document.getElementById('step1').classList.add('done');
